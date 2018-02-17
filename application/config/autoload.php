@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('minify','database','template','permission');
+$autoload['libraries'] = array('minify','database','template','permission','slug');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('mglobal');
+$autoload['model'] = array('auto_m');
 
 
 /* End of file autoload.php */

@@ -176,7 +176,9 @@ nav#header{
 .site > .site-body > .site-wrapper > .site-container label{
     color: #000;
 }
-
+.site .subsite-name{
+    color: #0d42cb;
+}
 .post{
     height: 300px;
     background-color: #fff;
@@ -296,6 +298,44 @@ nav#header{
 .post > .post-content > .post-options > .post-details .btn{
    border-radius: 0;
 }
+.post-read > .post-featured-img{
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #fff;
+}
+.post-read > .post-featured-img > a > img{
+    width: 100%;
+    height: 100%;
+}
+.post-read > .post-content{
+    
+    line-height: 20px;
+    font-size: 13px;
+    color: #555;
+}
+
+.post-read > .post-content > .post-content-desc{
+    
+    line-height: 20px;
+}
+
+.post-read > .post-content > .post-title > h3{
+    
+    font-size: 24px;
+    margin: 25px 0;
+}
+
+.post-read > .post-content > .post-options{
+    
+    font-size: 8px;
+    margin: 20px 0;
+    padding: 15px 0;
+    border:1px solid #e5e5e5;
+    border-left: none;
+    border-right: none;
+    text-transform: uppercase;
+}
 
 .side-bar .panel-search i.fa.fa-search{
     display: inline-block;
@@ -323,6 +363,13 @@ border-radius: 0;
 .side-bar .panel h4{
        padding: 0;
        margin: 0;
+}
+.side-bar .panel ul{
+   text-decoration: none;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+   line-height: 20px;
 }
 /* -------------------------------------   */
 

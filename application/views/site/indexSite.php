@@ -25,7 +25,7 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 							<div class="post-title"><a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>"><h4><?=$key->post_title?></h4></a></div>
 							<div class="post-content-desc"><?=$key->post_content?></div>
 							<div class="post-options">
-								<div class="posted-by">By <?=$this->post_m->posted_by($key->user_id);?></div>
+								<div class="posted-by"><?=$this->post_m->posted_by($key->user_id);?></div>
 								<div class="post-category">Research</div>
 								<div class="post-details"><a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>
 							</div>
@@ -43,7 +43,11 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 	</div>
 	<div class="panel">
 		<div class="panel-heading"><h4>RECENT POST</h4></div>
-		<div class="panel-body"></div>
+		<div class="panel-body">
+			<ul class="recent-post">
+				<?php echo $this->auto_m->recent_post(); ?>
+			</ul>
+		</div>
 
 
 	</div>

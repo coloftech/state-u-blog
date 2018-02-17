@@ -2,6 +2,14 @@
 <html>
 <head>
 	<title><?=$site_title;?></title>
+
+
+  <meta property="og:url"           content="<?=isset($link) ? $link : site_url();?>" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="<?=isset($meta_title) ? $meta_title : 'Bohol Island State University - Bilar'; ?>" />
+  <meta property="og:description"   content="<?=isset($description) ? $description : 'Bohol Island State University - Bilar a  premier Science and Technology University for the formation of World class and virtuous human resource for sustainable development in Bohol and the Country.'; ?>" />
+  <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/post-img.png'); ?>" />
+
 		<link rel="shortcut icon" href="<?=base_url();?>public/images/logo-only-icon.png"/>
         <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/bootstrap.min.css">  
         <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/font-awesome.css">        
@@ -23,9 +31,13 @@
 <body class="site"  data-spy="scroll" data-target=".navbar" data-offset="50">
 <header>
 	<div class="header-menu">
-		
 	<?php include 'common/site_menu.php'; ?>
 	</div>
+        <?php $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
+        $sitename = $this->site_m->getSiteName($page);
+
+         ?>
+        <div class="container"><?=isset($page) ? '<h3 class="subsite-name">'.$sitename[0]->site_name.'</h3>' : '' ;?></div>
 </header>
 <div class="site-body">
 	<?php echo $body; ?>

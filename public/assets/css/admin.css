@@ -2,6 +2,7 @@
 @import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); */
 html,body{
     min-width: 400px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 h1,h2,h3,h4,h5,h6{
     display: block;margin: 5px;
@@ -76,6 +77,13 @@ h1,h2,h3,h4,h5,h6{
 .table .btn{
     padding: 2px 5px;
     margin: 0 1px;
+}
+
+#page-wrapper > .container-fluid .clickable{
+    cursor: pointer;
+}
+.form-control{
+    border-radius: 0;
 }
 @media(min-width:768px) {
     #page-wrapper > .container-fluid{

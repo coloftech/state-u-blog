@@ -133,6 +133,8 @@ class Site extends CI_Controller {
 			$data['site_title'] = 'Read post';
 		}
 
+			
+
 		$this->template->load(false,'site/read',$data);
 
 	}

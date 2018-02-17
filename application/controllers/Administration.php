@@ -16,7 +16,11 @@ class Administration extends CI_Controller {
 		 if (!$this->permission->is_loggedIn()){
 		 	redirect();
 		 }
+
 		$this->load->model('admin_m');
+
+
+		$this->auto_m->free_space();
 	}
 	public function index($value='')
 	{
