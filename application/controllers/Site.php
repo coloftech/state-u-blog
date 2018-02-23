@@ -33,12 +33,54 @@ class Site extends CI_Controller {
 	public function index()
 	{
 
-		$data['site_title'] = 'Welcome';
+		$limit = 5;
+		$start = $this->input->get('row') ? $this->input->get('row') : 0;
+		$total_rows = count($this->post_m->get_site_post());
+
+		$data['posts'] = $this->post_m->get_site_post(false,$limit,$start);
+		$data['pagination'] = $this->paging($total_rows,$limit,$start);
+
+
+
+		$data['site_title'] = 'Bohol Island State University - Bilar Campus';
 		$this->template->load(false,'site/index',$data);
+	}
+
+
+	public function paging($total=0,$limit=0,$start=0)
+	{
+		
+						$config['base_url'] = site_url();
+			            $config['total_rows']=$total;
+			            $config['per_page'] = $limit;			            
+				        $choice = $config["total_rows"]/$config["per_page"];
+				        $config["num_links"] = floor($choice);             
+             
+			            $this->pagination->initialize($config);
+			                 
+			            /*$data['links'] =*/ 
+			            return $this->pagination->create_links();
+	}
+
+	public function subpaging($total=0,$limit=0,$start=0,$page='')
+	{
+		
+						$config['base_url'] = site_url("c=site&f=view&p=$page");
+			            $config['total_rows']=$total;
+			            $config['per_page'] = $limit;			            
+				        $choice = $config["total_rows"]/$config["per_page"];
+				        $config["num_links"] = floor($choice);             
+             
+			            $this->pagination->initialize($config);
+			                 
+			            /*$data['links'] =*/ 
+			            return $this->pagination->create_links();
 	}
 	public function view($page='')
 	{
-		$page = $this->input->get('p') ? $this->input->get('p') : 'Bilar';
+
+
+		$page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 
 		$site = $this->site_m->getSiteName($page);
 		$siteName = isset($site[0]->site_name) ? $site[0]->site_name : 'Bilar Campus' ;
@@ -48,31 +90,48 @@ class Site extends CI_Controller {
 		$info = $this->input->get('i') ? $this->input->get('i') : 'post';
 
 		if($info == 'post'){
-			$data['posts'] = $this->post_m->get_site_post($siteId);
+
+				$limit = 5;
+				$start = $this->input->get('row') ? $this->input->get('row') : 0;
+				$total_rows = count($this->post_m->get_site_post($siteId));
+
+				$data['pagination'] = $this->subpaging($total_rows,$limit,$start,$page);
+
+					$data['posts'] = $this->post_m->get_site_post($siteId,$limit,$start);
+
+
+
+
+
+
 
 		}elseif($info == 'about')
 		{
 			if($sitesetting = $this->site_m->getSettings($info,$siteId)){
 
 			$data['about'] = $sitesetting[0]->setting_value;
-		}
+			}
 		
+		}else{
+
+			if($sitesetting = $this->site_m->getSettings($info,$siteId)){
+
+			$data['about'] = $sitesetting[0]->setting_value;
+
+			$info_v = 'site/settingInfo';
+			$siteName = urldecode($info);
+			}
+
 		}
 
 
-		switch ($page) {
-			case 'research':
-				# code...
-		$data['site_title'] = $siteName;
-				break;
-			
-			default:
 
 		$data['site_title'] = $siteName;
-				break;
-		}
+		
+		if(empty($info_v)){
 
 		$info_v = $this->info($page,$info);
+		}
 
 		$this->template->load(false,$info_v,$data);
 	}
@@ -115,11 +174,19 @@ class Site extends CI_Controller {
 	public function read($url=false)
 	{	
 		$info = '';
+
+		$page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
+
 		if($this->input->get()){
 			if($this->input->get('i')){
 				$info = $this->input->get('i');
 				if(!empty($info)){
-					$info = $this->post_m->get_postBySlug($info);
+
+					if($site_id =  $this->site_m->getSiteId($page)){
+
+						$info = $this->post_m->get_postBySlug($info,$site_id);
+
+					}
 				}
 			}
 			else{

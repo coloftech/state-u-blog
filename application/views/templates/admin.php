@@ -12,7 +12,6 @@
         <link href="<?=base_url('public/assets/plugin/bootstrap-tagsinput/dist/bootstrap-tagsinput.css');?>" rel="stylesheet">
 
 
-        <link href="<?=base_url('public/assets/css/site/index.css');?>" rel="stylesheet">
         <?php // add css files
         $this->minify->css(array('animate.css','admin.css','print.css'));
         echo $this->minify->deploy_css(FALSE, 'admin-style.min.css');    ?>
@@ -33,7 +32,7 @@
 </head>
 <header>
     <div class="wrapper">
-     <?php require_once 'common/admin_menu.php'; ?>
+     <?php require_once 'common/menu_admin.php'; ?>
      </div>
 </header>
     <div id="page-wrapper">

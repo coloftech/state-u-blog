@@ -15,9 +15,6 @@ body {
 body {
     padding-top: 100px;
 }
-footer {
-    padding: 30px 0;
-}
 
 /*
  * Custom styles
@@ -177,6 +174,7 @@ nav#header{
     color: #000;
 }
 .site .subsite-name{
+    text-transform: uppercase;
     color: #0d42cb;
 }
 .site > .site-body > .site-wrapper > .site-container > .post-index{
@@ -274,6 +272,12 @@ nav#header{
 
 .post > .post-content >.post-title > a > h4{
     font-size: 20px;
+    text-transform: uppercase;
+
+}
+
+.post > .post-content >.post-title > a > h4::first-letter{
+    font-size: 25px;
 
 }
 .post > .post-content > .post-content-desc{
@@ -281,7 +285,9 @@ nav#header{
     display: block;
     overflow: hidden;
 }
-
+.post > .post-content > .post-content-desc::first-letter{
+    font-size: 18px;
+}
 .post > .post-content > .post-options{
     display: block;
     padding: 5px 0;
@@ -326,7 +332,7 @@ nav#header{
 }
 
 .post-read > .post-content > .post-title > h3{
-    
+    text-transform: uppercase;
     font-size: 24px;
     margin: 25px 0;
 }
@@ -377,9 +383,14 @@ border-radius: 0;
    line-height: 20px;
 }
 
+.side-bar .panel ul > li > a{
+   text-transform: uppercase;
+}
 footer{
+    padding: 30px 0;
     background-color: #12387e;
     min-height: 200px; 
+    color: #fff;
 }
 footer > .container > .footer-top{
 
@@ -500,8 +511,7 @@ footer > .container > .footer-bottom{
 }
 .carousel-caption .caption-title-top:hover{
     background: #222;
-    max-width:430px;
-    padding: 10px;
+    max-width:400px;
     
 }
 .carousel-caption p{

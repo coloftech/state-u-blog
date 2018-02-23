@@ -43,7 +43,7 @@
 			data: data,
 			url: '<?=site_url('c=site&f=check_login');?>',
 			success: function(res){
-				//console.log(res);
+				console.log(res);
 				if(res.stats){
 
              $('header').notify(res.msg, { position:"bottom right", className:"success" }); 
@@ -51,6 +51,7 @@
              setTimeout(function(){
              	window.location.reload() = true;
              },2000);
+             return false;
          	}else{
 
              $('header').notify(res.msg, { position:"bottom right", className:"error" }); 

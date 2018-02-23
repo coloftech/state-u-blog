@@ -11,12 +11,21 @@
 			   		<?php foreach ($post as $key): ?>
 			   			
 			   			<div class="post-featured-img">
-			   				<a href="#"><img src="<?=base_url('public/images/post-img.png')?> " /></a>
+			   				<a href="#">
+
+									<?php if ($img_link = $this->post_m->get_featuredImg($key->post_id)): ?>
+										
+									<img src="<?=base_url($img_link)?>">
+									<?php else: ?>
+
+									<img src="<?=base_url('public/images/post-img.png')?>">
+									<?php endif ?>
+								</a>
 			   			</div>
 			   			<div class="post-content">
 			   				<div class="post-title">
 
-			   					<h3><?php echo $key->post_title; ?></h3>
+			   					<h3><?php echo $key->post_title; ?> <a href="<?=site_url("c=post&f=edit&id=$key->post_id");?>"><i class="btn fa fa-edit"></i></a></h3>
 			   					</div>
 			   				<div class="post-content-desc">
 			   					<?php echo $key->post_content; ?>

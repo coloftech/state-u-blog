@@ -16,17 +16,36 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 							<div class="month"><?=$key->post_month;?></div>
 							<div class="day"><?=$key->post_day;?></div>
 							<div class="blured">
-								<a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>"><img src="<?=base_url('public/images/post-img.png')?>"></a>
+								<a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>">
+
+									<?php if ($img_link = $this->post_m->get_featuredImg($key->post_id)): ?>
+										
+									<img src="<?=base_url($img_link)?>">
+									<?php else: ?>
+
+									<img src="<?=base_url('public/images/post-img.png')?>">
+									<?php endif ?>
+								</a>
 
 							</div>
 							
 						</div>
 						<div class="col-md-6 post-content">
-							<div class="post-title"><a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>"><h4><?=$key->post_title?></h4></a></div>
-							<div class="post-content-desc"><?=$key->post_content?></div>
+							<div class="post-title"><a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>"><h4><?=$this->auto_m->limit_title($key->post_title);?></h4></a></div>
+							<div class="post-content-desc"><?=$this->auto_m->limit_300($key->post_content)?></div>
 							<div class="post-options">
-								<div class="posted-by"><?=$this->post_m->posted_by($key->user_id);?></div>
-								<div class="post-category">Research</div>
+								<div class="posted-by"><?php echo ucfirst($key->site_path); /*$this->post_m->posted_by($key->user_id); */
+								?></div>
+								<div class="post-category"><?php 
+
+								if($category = $this->post_m->get_categories($key->post_id)){
+									foreach ($category as $cat) {
+										
+										echo "<span class='category-item'>$cat->cat_name</span> ";
+									}
+								}
+
+								?></div>
 								<div class="post-details"><a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>
 							</div>
 						</div>
@@ -35,6 +54,7 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 			<?php endif ?>
 		<?php endif ?>
 
+<div class="col-md-12"><?=isset($pagination) ? $pagination :"";?></div>
 </div>
 <div class="col-md-3 side-bar">
 	<div class="panel panel-search">

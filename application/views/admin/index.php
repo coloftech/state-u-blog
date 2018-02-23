@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="wrapper admin-wrapper create">
 	<div class="panel Statitics">
 		<div class="panel-heading"><h4>Statitics</h4></div>
 	

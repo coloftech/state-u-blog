@@ -7,10 +7,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Post_m extends CI_Model
 {
 
-	public function get_site_post($site_id='',$limit=false,$start=false)
+	public function get_site_post($site_id=false,$limit=false,$start=false)
 	{
-		$post = $this->db->dbprefix('post');
-		$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path')
+		if ($site_id) {
+			$post = $this->db->dbprefix('post');
+			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path,site.site_name')
 			->from('post')
 			->join('site','site.site_id = post.site_id','LEFT')
 			->where('post.site_id',$site_id)
@@ -23,6 +24,25 @@ class Post_m extends CI_Model
 			$query = $this->db->get();
 
 		return $query->result();
+		}else{
+
+
+			$post = $this->db->dbprefix('post');
+			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path')
+			->from('post')
+			->join('site','site.site_id = post.site_id','LEFT')			
+			->order_by('post.date_posted desc');
+			if($limit && $start){
+			$this->db->limit($limit,$start);
+			}elseif($limit){
+			$this->db->limit($limit);
+			}
+			$query = $this->db->get();
+
+		return $query->result();
+
+		}
+		
 	}
 
 	public function posted_by($id=0)
@@ -35,18 +55,80 @@ class Post_m extends CI_Model
 		}
 	}
 
-	public function get_categories()
+	public function get_categories($post_id = false)
 	{
+		if($post_id){
+
+		$query = $this->db->select('category.*')
+				->from('category')
+				->join('post_category','post_category.cat_id = category.cat_id','Left')
+				->where('post_category.post_id',$post_id)
+				->get();
+		return $query->result();
+	}else{
+
 		$this->db->select('*');
 		$query = $this->db->get('category');
 		return $query->result();
+	}
 			
 	}
-	public function get_postBySlug($slug='')
+	public function get_postBySlug($slug='',$site_id=0)
 	{
-		$query = $this->db->get_where('post',array('slug'=>$slug));
-		if($result = $query->result()){
-			return $result;
+		if(is_string($slug) && $site_id > 0){
+			$query = $this->db->get_where('post',array('slug'=>$slug,'site_id'=>$site_id));
+
+			if($result = $query->result()){
+				return $result;
+			}
+				return false;
+		}
+			return false;
+		
+	}
+	public function get_postById($post_id=0,$site_id=0)
+	{
+		if($post_id > 0){
+			//$query = $this->db->get_where('post',array('post_id'=>$post_id));
+
+			$this->db->select('post.*,site.site_path,site.site_name')
+			->from('post')
+			->join('site','site.site_id = post.site_id','LEFT')
+			->where(array('post_id'=>$post_id));
+			$query = $this->db->get();
+			if($result = $query->result()){
+				return $result;
+			}
+				return false;
+		}
+			return false;
+		
+	}
+
+	public function get_tagsById($post_id=0,$site_id=0)
+	{
+		if($post_id > 0){
+			//$this->db->select('keyword');
+			$query = $this->db->get_where('post_tag',array('post_id'=>$post_id));
+			if($result = $query->result()){
+				return $result;
+			}
+				return false;
+		}
+			return false;
+		
+	}
+
+	public function get_featuredImg($post_id=0)
+	{
+		if ($post_id > 0) {
+			$this->db->select('link');
+			$query = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+			if($result = $query->result()){
+				return $result[0]->link;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}
@@ -88,6 +170,12 @@ class Post_m extends CI_Model
 
 	}
 
+	public function save_category($info=false)
+	{
+		if($info){
+			$this->db->insert('post_category',$info);
+		}
+	}
 	public function save_file($post_id=0,$u_key=0)
 	{
 		if($post_id > 0){
@@ -105,6 +193,7 @@ class Post_m extends CI_Model
 			return;
 		}
 	}
+
 
 	public function remove_tags($id)
 	{
@@ -127,6 +216,25 @@ class Post_m extends CI_Model
 		}else{
 			return 0;
 		}
+
+	}
+	public function titleId($title = false){
+
+		if($title){
+			
+			$q = $this->db->select('post_id')
+				->from('post')
+				->where('post_title',$title)
+				->get();
+				if($result = $q->result()){
+
+				return $result;
+				}
+				else{
+					return false;
+				}
+		}
+		return false;
 
 	}
 
@@ -166,13 +274,73 @@ class Post_m extends CI_Model
 			foreach ($result as $key) {
 				/* remove not use in post or gallery image */
 				if((int)$key->u_key + 1200 < $time){
-
+					unlink($key->link);
 					$this->db->where('id',$key->id);	
 					$this->db->delete('post_file');
 
 				}
 			}
 
+		}
+	}
+
+
+	public function update_post_info($info,$post_id=0)
+	{
+		if (is_array($info) && $post_id > 0) {
+			# code...
+			
+
+			return $this->db->where('post_id',$post_id)
+							->update('post',$info);
+
+		}
+		return false;
+
+	}
+
+	public function update_tag($tags=false,$id)
+	{
+		# code...
+		if ($tags) {
+			# code...
+			$this->db->delete('post_tag',array('post_id'=>$id));
+			$this->db->insert('post_tag',array('keyword'=>$tags,'post_id'=>$id));
+			return;
+		}
+	}
+
+	public function update_file($post_id=0,$u_key=0)
+	{
+		if($post_id > 0){
+
+
+				$q = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+				if($result = $q->result()){
+					foreach ($result as $key) {
+						/* remove not use in post or gallery image */
+							unlink($key->link);
+							$this->db->where('id',$key->id);	
+							$this->db->delete('post_file');
+
+						
+					}
+
+				}
+
+			$q2 = $this->db->set('post_id',$post_id);
+			$this->db->where('u_key',$u_key);
+			return $this->db->update('post_file');
+		}
+	}
+
+	public function update_category($post_id = 0, $info=false)
+	{
+		if($info && $post_id > 0){
+
+			$this->db->set($info);
+			$this->db->where('post_id',$post_id);
+			return $this->db->update('post_category');
 		}
 	}
 

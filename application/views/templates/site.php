@@ -10,15 +10,14 @@
   <meta property="og:description"   content="<?=isset($description) ? $description : 'Bohol Island State University - Bilar a  premier Science and Technology University for the formation of World class and virtuous human resource for sustainable development in Bohol and the Country.'; ?>" />
   <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/post-img.png'); ?>" />
 
-		<link rel="shortcut icon" href="<?=base_url();?>public/images/logo-only-icon.png"/>
+		<link rel="shortcut icon" href="<?=base_url();?>public/images/fav-bisu.png"/>
         <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/bootstrap.min.css">  
         <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/font-awesome.css">        
         <link href="<?=base_url('public/assets/css/animate.css');?>" rel="stylesheet">
 
 
-        <link href="<?=base_url('public/assets/css/site/index.css');?>" rel="stylesheet">
         <?php // add css files
-        $this->minify->css(array('animate.css','site/index.css','print.css'));
+        $this->minify->css(array('animate.css','site/index.site.css','print.css'));
         echo $this->minify->deploy_css();
         
     ?>
@@ -29,22 +28,44 @@
         <script src="<?=base_url('public/assets/js/notify/dist/notify.js');?>" type="text/javascript"></script>
 </head>
 <body class="site"  data-spy="scroll" data-target=".navbar" data-offset="50">
-<header>
+<header >
+    <div id="top"></div>
 	<div class="header-menu">
 	<?php include 'common/site_menu.php'; ?>
 	</div>
         <?php $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
-        $sitename = $this->site_m->getSiteName($page);
+        if($sitename = $this->site_m->getSiteName($page)){
+            echo "<div class='container'><h3>".$sitename[0]->site_name."</h3></div>";
+        }else{
+            redirect();
+        }
 
          ?>
-        <div class="container"><?=isset($page) ? '<h3 class="subsite-name">'.$sitename[0]->site_name.'</h3>' : '' ;?></div>
 </header>
-<div class="site-body">
+<div class="site-body" >
 	<?php echo $body; ?>
 </div>
 
 <footer>
-	
+    <div class="container">
+        
+    <div class="footer-top">
+        <div class="col-md-4">
+            <h3>ABOUT US</h3>
+        </div>
+        <div class="col-md-4">
+            <h3>RECENT POST</h3></div>
+        <div class="col-md-4">
+            
+            <h3>BISU CAMPUSES</h3>
+        </div>
+    </div>
+    <div class="footer-center"><a href="#top" class="btn btn-top">TOP</a></div>
+     <div class="footer-bottom">
+         
+     </div> 
+
+    </div>
 </footer>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -133,5 +154,7 @@ offSetManager();
 */
 
 </script>
+
+        <script src="<?=base_url('public/assets/js/col-script.js');?>" type="text/javascript"></script>
 </body>
 </html>

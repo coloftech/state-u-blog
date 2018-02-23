@@ -11,29 +11,28 @@
 
         <!-- First slide -->
         <div class="item active skyblue-vh">
-          <img src="<?=base_url();?>/public/images/slide-img.jpg"  data-animation="animated fadeInDown">
+          <img src="<?=base_url();?>/public/images/bisu-2.png"  data-animation="animated fadeInDown">
           <div class="carousel-caption">
-            <h3 data-animation="animated zoomInLeft">
-              Welcome to Coloftech | State of the Arts &amp; Technology
+            <h3 data-animation="animated zoomInLeft" class="caption-title-top">
+             Bohol Island State University <br /><span class="campus">Bilar Campus</span>
             </h3>
-            <h3 data-animation="animated bounceInRight">
-              Let's build your dream website.
+            <h3 data-animation="animated bounceInRight"  class="caption-title-center">
+              A green university for prosperity.
             </h3>
-            <button class="btn btn-primary btn-lg" data-animation="animated zoomInUp">Contact us now!</button>
           </div>
         </div> <!-- /.item -->
 
         <!-- Second slide -->
         <div class="item skyblue-vw">
-          <img src="<?=base_url();?>public/images/green-1-sub.jpg"  data-animation="animated fadeInDown">
+          <img src="<?=base_url();?>public/images/post-img"  data-animation="animated fadeInDown">
           <div class="carousel-caption">
             <h3 class="icon-container" data-animation="animated bounceInDown">
-              <img src="<?=base_url();?>public/images/android.png">
+
             </h3>
             <h3 data-animation="animated bounceInUp">
-              We are smart &amp; creative
+
             </h3>
-            <button class="btn btn-primary btn-lg" data-animation="animated zoomInRight">Contact us now!</button>
+
           </div>
         </div><!-- /.item -->
 

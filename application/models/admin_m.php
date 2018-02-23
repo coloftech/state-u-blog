@@ -17,8 +17,9 @@ class admin_m extends CI_Model
 		# code...
 
 		
-		$query = $this->db->get('col_site');
-		return $query->result();
+		//$query = $this->db->get('col_site');
+		//return $query->result();
+		return $this->permission->hosted_sites();
 	}
 	public function save_site($site_name=false,$site_path=false)
 	{

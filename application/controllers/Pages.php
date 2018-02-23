@@ -1,0 +1,110 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Pages extends CI_Controller {
+
+
+
+	public $uid;
+	public $username;
+	function __construct()
+	{
+		parent::__construct();
+		$this->init();
+	}
+	public function init($value='')
+	{
+			 if (!$this->permission->is_loggedIn()){
+		 	redirect();
+		 }
+		 $this->uid = $this->session->userdata['id'];
+		 $this->username = $this->session->userdata['username'];
+		 $this->load->model('post_m');
+		$this->load->model('admin_m');
+		$this->load->model('site_m');
+		$this->load->model('pages_m');
+	}
+	public function index($value='')
+	{
+		$data['list_pages'] = $this->pages_m->list_pages();
+		$data['is_hidden'] = 'hidden';
+		$data['site_title'] = 'List pages';
+		$this->template->load('admin','admin/pages/list_pages.php',$data);
+	}
+	public function add_page($value='')
+	{
+		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
+
+
+		$data['parents'] = $this->pages_m->getParentPages();
+
+		$data['is_hidden'] = 'hidden';
+		$data['site_title'] = 'Add new page';
+		$this->template->load('admin','admin/pages/add_page.php',$data);
+	}
+	public function get_parent(){
+		if($this->input->post()){
+			$input = (object)$this->input->post();
+
+			if($parents = $this->pages_m->getParentPages(0,$input->opt_site)){
+				$parent = '<select class="form-control" id="opt_parent" name="opt_parent">';
+				foreach ($parents as $key) {
+					# code...
+					$parent .= '<option value="'.$key->page_id.'">'.$key->page_title.'</option>';
+				}
+				$parent .= '</select>';
+
+			//echo $parent;
+			echo json_encode(array('stats'=>true,'msg'=>$parent));
+			}else{
+
+			echo json_encode(array('stats'=>false,'msg'=>'<option value="0">No parent yet</option>'));
+			}
+
+		}
+	}
+
+	public function save_page($value='')
+	{
+		if ($this->input->post()) {
+			$input = (object) $this->input->post();
+
+			if(empty($input->opt_parent)){
+				echo json_encode(array('stats'=>false,'msg'=>'Parent is required'));
+				exit();
+			}
+			if(empty($input->title)){
+				echo json_encode(array('stats'=>false,'msg'=>'Title is required'));
+				exit();
+			}
+			if($this->pages_m->getPage($input->title,$input->opt_site)){
+
+				echo json_encode(array('stats'=>false,'msg'=>'Page Title already exist'));
+				exit();
+			}
+
+			if($this->pages_m->save_page(array('page_title'=>$input->title,'site_id'=>$input->opt_site,'parent_id'=>$input->opt_parent,'page_content'=>$input->desc))){
+				echo json_encode(array('stats'=>true));
+			}else{
+				echo json_encode(array('stats'=>false,'msg'=>'Post unsuccessful;'));
+			}
+
+		}
+	}
+
+	public function add_parent(){
+		//var_dump($this->input->post());
+		if ($this->input->post()) {
+			$input = (object) $this->input->post();
+
+			if($this->pages_m->save_parent(array('page_title'=>$input->parent_title,'site_id'=>$input->parent_site_id,'parent_id'=>0))){
+				echo json_encode(array('stats'=>true));
+			}else{
+				echo json_encode(array('stats'=>false,'msg'=>'Post unsuccessful;'));
+			}
+		}
+	}
+
+
+
+}

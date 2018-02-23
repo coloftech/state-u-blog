@@ -38,13 +38,54 @@ class Site_m extends CI_Model
 
 	}
 
-	public function getSiteName($path='')
+	public function getSiteName($path=false,$site_id = false)
 	{
-		$query = $this->db->select('*')
+		if($path){
+
+			$query = $this->db->select('*')
+				->from('site')
+				->where('site_path',$path)
+				->get();
+			return $query->result();
+		}elseif($site_id){
+
+			$query = $this->db->select('*')
+				->from('site')
+				->where('site_id',$site_id)
+				->get();
+			return $query->result();
+		}else{
+			return false;
+		}
+
+
+	}
+	public function getSiteId($path='')
+	{
+		$query = $this->db->select('site_id')
 			->from('site')
 			->where('site_path',$path)
 			->get();
-		return $query->result();
+		if($r = $query->result()){
+			return $r[0]->site_id;
+		}else{
+			return false;
+		}
+
+
+	}
+
+	public function getSettingNameById($id='')
+	{
+		$query = $this->db->select('setting_name')
+			->from('site_setting')
+			->where('id',$id)
+			->get();
+		if($r = $query->result()){
+			return $r[0]->setting_name;
+		}else{
+			return false;
+		}
 
 
 	}
@@ -62,4 +103,78 @@ class Site_m extends CI_Model
 
 
 	}
+
+	public function getsiteSettings($siteId = 1,$parent = 0)
+	{
+
+			$query = $this->db->select('*')
+				->from('site_setting')
+				->where(array('parent_id'=>$parent,'site_id'=>$siteId))
+				->get();
+			return $query->result();
+
+
+	}
+	public function getallSettings($info=false,$siteId = 1)
+	{
+		if($this->permission->is_admin()){
+			$query =  $this->db->get_where('site_setting',array('parent_id <>'=>0));
+			return $query->result();
+
+		}
+		if ($info && is_string($info)) {
+
+			$query = $this->db->select('*')
+				->from('site_setting')
+				->where(array('site_id'=>$siteId))
+				->get();
+			return $query->result();
+			}
+		return false;
+
+
+	}
+
+	public function getaboutSettings($info=false,$siteId = 1)
+	{
+		if($this->permission->is_admin()){
+			$query =  $this->db->get_where('site_setting',array('parent_id '=>1));
+			return $query->result();
+
+		}
+		if ($info && is_string($info)) {
+
+			$query = $this->db->select('*')
+				->from('site_setting')
+				->where(array('site_id'=>$siteId))
+				->get();
+			return $query->result();
+			}
+		return false;
+
+
+	}
+
+
+	public function getservicesSettings($info=false,$siteId = 1)
+	{
+		if($this->permission->is_admin()){
+			$query =  $this->db->get_where('site_setting',array('parent_id '=>2));
+			return $query->result();
+
+		}
+		if ($info && is_string($info)) {
+
+			$query = $this->db->select('*')
+				->from('site_setting')
+				->where(array('site_id'=>$siteId))
+				->get();
+			return $query->result();
+			}
+		return false;
+
+
+	}
+
+
 }

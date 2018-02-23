@@ -36,47 +36,42 @@
                 
 
                 <li>
-                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Post <i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Post Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="submenu-2" class="collapse">
-                        <li><a href="<?=site_url('c=post&f=create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
-                        <li><a href="<?=site_url('c=post&f=list_all');?>"><i class="fa fa-angle-double-right"></i> List all</a></li>
+
+                        <li><a href="<?=site_url('c=post&f=create');?>"><i class="fa fa-angle-double-right"></i> New post</a></li>
+                        <li><a href="<?=site_url('c=post&f=list_all');?>"><i class="fa fa-angle-double-right"></i> List posts</a></li>
 
                     
                         <li><a href="<?=site_url('ref=post&com=category');?>"><i class="fa fa-angle-double-right"></i> Category</a></li>
                     </ul>
                 </li>
 
-
-                <?php if ($this->permission->is_admin()): ?>
-                    
                 <li>
-                    <a href="#" data-toggle="collapse" data-target="#messages"><i class="fa fa-fw fa-paper-plane-o"></i>  Messages <i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                    <ul id="messages" class="collapse">
-                        <li><a href="<?=site_url('messages/compose');?>"><i class="fa fa-angle-double-right"></i> Compose</a></li>
-                        <li><a href="<?=site_url('messages');?>"><i class="fa fa-angle-double-right"></i> Inbox</a></li>
-                        <li><a href="<?=site_url('messages/sent');?>"><i class="fa fa-angle-double-right"></i> Sent</a></li>
+                    <a href="#" data-toggle="collapse" data-target="#site_setting"><i class="fa fa-fw fa-globe"></i>  Site setting <i class="fa fa-fw fa-angle-down pull-right"></i></a>
+
+                    <ul id="site_setting"  class="collapse">
+                        <li><a href="<?=site_url()?>">New site</a></li>
+                        <li><a href="<?=site_url()?>">List sites</a></li>
+
                     </ul>
                 </li>
-                <?php endif ?>
-                                <li>
-                    <a href="#" data-toggle="collapse" data-target="#Administration"><i class="fa fa-fw fa-gears"></i> Administration <i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                    <ul id="Administration" class="collapse">
-                        <?php if ($this->permission->is_admin  ()): ?>
-                            
-                        <li><a href="<?=site_url();?>"><i class="fa fa-angle-double-right"></i> Backup</a></li>
-                        <li><a href="<?=site_url('c=settings');?>"><i class="fa fa-angle-double-right"></i>Site Settings</a></li>                 
-                        <?php endif ?>
-                        <li><a href="<?=site_url('c=administration&f=sites');?>"><i class="fa fa-angle-double-right"></i> Hosted site</a></li>       
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#page"><i class="fa fa-fw fa-file-powerpoint-o"></i> Page setting <i class="fa fa-fw fa-angle-down pull-right"></i></a>
+
+                    <ul id="page"  class="collapse">
+                        <li><a href="<?=site_url('c=pages&f=add_page')?>">New page</a></li>
+                        <li><a href="<?=site_url('c=pages')?>">List pages</a></li>
 
                     </ul>
                 </li>
                         <?php if ($this->permission->is_admin  ()): ?>
                             
                  <li>
-                    <a href="#" data-toggle="collapse" data-target="#user"><i class="fa fa-fw fa-users"></i> User <i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <a href="#" data-toggle="collapse" data-target="#user"><i class="fa fa-fw fa-users"></i> User setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="user" class="collapse">
-                        <li><a href="<?=site_url('c=user');?>"><i class="fa fa-angle-double-right"></i> List users</a></li>
-                        <li><a href="<?=site_url('c=user&f=create');?>"><i class="fa fa-angle-double-right"></i> Create</a></li>                        
+                        <li><a href="<?=site_url('c=user&f=create');?>"><i class="fa fa-angle-double-right"></i> New user</a></li>
+                        <li><a href="<?=site_url('c=user');?>"><i class="fa fa-angle-double-right"></i> List users</a></li>                        
                         <li><a href="<?=site_url('c=user&f=permission');?>"><i class="fa fa-angle-double-right"></i> Permission</a></li>
 
                     </ul>

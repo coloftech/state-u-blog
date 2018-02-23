@@ -30,7 +30,7 @@
 	
 	//Pause carousel  
 	$myCarousel.carousel({
-      interval: 5000
+      interval: 4000
     });
 	
 	
