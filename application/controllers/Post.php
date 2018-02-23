@@ -228,6 +228,19 @@ class Post extends CI_Controller {
 
 		
 	}
+	public function remove_post()
+	{
+		if($this->input->post()){
+			$input = (object)$this->input->post();
+			if($this->post_m->remove_post($input->post_id)){
+				echo json_encode(array('stats'=>true));
+				exit();
+			}
+				echo json_encode(array('stats'=>true));
+				exit();
+		}
+
+	}
 
 	public function save_file()
 	{

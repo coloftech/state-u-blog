@@ -77,6 +77,9 @@
                     </ul>
                 </li>
                         <?php endif ?>
+
+
+                <li><a href="<?=site_url('c=administration&f=create_zip');?>"><i class="fa fa-fw fa-home"></i>Backup</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->

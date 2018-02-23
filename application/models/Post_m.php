@@ -283,6 +283,24 @@ class Post_m extends CI_Model
 
 		}
 	}
+	public function remove_post($post_id=0)
+	{
+		$q = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+		if($result = $q->result()){
+			foreach ($result as $key) {
+					unlink($key->link);
+					$this->db->where('id',$key->id);	
+					$this->db->delete('post_file');
+			}
+
+		}
+		$this->db->where('post_id',$post_id);
+		$this->db->delete(array('post_tag','post_category'));
+		$this->db->where('post_id',$post_id);
+		return $this->db->delete(array('post'));
+
+
+	}
 
 
 	public function update_post_info($info,$post_id=0)

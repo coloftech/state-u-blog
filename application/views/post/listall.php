@@ -12,7 +12,7 @@
 							if (is_array($listall)) {
 								foreach ($listall as $key) {								
 								?>
-								<tr>
+								<tr id="tr-<?=$key->post_id;?>">
 									<td><?=$key->post_id;?></td>
 									<td><?=$key->post_title;?></td>
 									<td><?php 
@@ -26,7 +26,7 @@
 
 								?></td>
 									<td><?=$key->site_path;?></td>
-									<td><a href="<?=site_url("c=post&f=edit&id=$key->post_id");?>"><i class="btn fa fa-edit"></i></a> | <a href="<?=site_url("c=post&f=edit&id=$key->post_id");?>"><i class="btn fa fa-remove"></i></a></td>
+									<td><a href="<?=site_url("c=post&f=edit&id=$key->post_id");?>"><i class="btn fa fa-edit"></i></a> <a href="javascript:void(0)" id="remove_post" onclick="remove_post(<?=$key->post_id;?>)"><i class="btn fa fa-remove"></i></a></td>
 								</tr>
 								<?php
 								}
@@ -205,5 +205,31 @@ $('#selectcategory').change(function(){
 		return false;
 	}
 
+	}
+
+	function remove_post(post_id){
+
+				$.ajax({
+						type: 'post',
+						url: '<?=site_url("c=post&f=remove_post");?>',
+						data: 'post_id='+post_id,
+						dataType:'json',
+						success: function(response){
+							console.clear();
+							console.log(response);	
+							if(response.stat == true){
+							$('#tr-'+post_id).remove();
+		             		$('header').notify('Post successfully remove', { position:"bottom right", className:"success" }); 
+
+
+							}else{
+	
+		             		$('header').notify('Post is not remove', { position:"bottom right", className:"error" }); 
+
+
+							}
+
+						}
+					});
 	}
 </script>
