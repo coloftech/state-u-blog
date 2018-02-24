@@ -22,7 +22,7 @@
 						<td><?=$key->page_id?></td>
 						<td><?=$key->page_title?></td>
 						<td><?php echo $this->site_m->getSiteName(false,$key->site_id)[0]->site_name;?></td>
-						<td width="100px"><a href="" class="btn"><i class="fa fa-edit"></i></a></td>
+						<td width="100px"><a href="<?=site_url('c=pages&f=edit_page&id='.$key->page_id)?>" class="btn"><i class="fa fa-edit"></i></a></td>
 					</tr>
 
 						<?php endforeach ?>

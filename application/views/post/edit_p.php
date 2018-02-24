@@ -40,6 +40,72 @@
 			<div class="panel-body">
 				
 			<div class="category">
+				<label for="Title">Date &nbsp;</label><br />
+
+<div class="col-md-4"  style="padding-left: 0; padding-right: 0;">
+        <select class="form-control" name="months" id="months" >
+        <?php 
+
+
+
+        $months = array(
+          array('id'=>1,'name'=>'Jan'),
+          array('id'=>2,'name'=>'Feb'),
+          array('id'=>3,'name'=>'Mar'),
+          array('id'=>4,'name'=>'Apr'),
+          array('id'=>5,'name'=>'May'),
+          array('id'=>6,'name'=>'Jun'),
+          array('id'=>7,'name'=>'Jul'),
+          array('id'=>8,'name'=>'Aug'),
+          array('id'=>9,'name'=>'Sep'),
+          array('id'=>10,'name'=>'Oct'),
+          array('id'=>11,'name'=>'Nov'),
+          array('id'=>12,'name'=>'Dec')
+
+          );
+
+        //$m = date('m');
+
+        foreach ($months as $key) {
+          # code...
+            if($key['id'] == $m){$iscurrent = 'selected';}else{$iscurrent='';}
+            echo "<option value='".$key['id']."' $iscurrent>".$key['name']."</option>";
+        }
+        ?>
+        </select></div>
+         <div class="col-md-4"  style="padding-left: 0; padding-right: 0;">
+        <select  class="form-control " name='days' id='days'  >
+          
+        <?php
+        //$d = date('d');
+        var_dump($d);
+        for ($i=1; $i <=31; $i++) { 
+          # code...
+          echo "<option value ='$i'";
+          if ($i == $d) {
+            # code...
+            echo ' selected';
+          }
+          echo ">$i</option>";
+        }
+        ?>
+        </select>
+       </div>
+        <div class="col-md-4"  style="padding-left: 0;padding-right: 0; ">
+        <select class="form-control" name="years" id="years"  >
+          <?php 
+          $currentY = date('Y');
+          for ($i=1912; $i <= $currentY; $i++) { 
+            # code...
+            if($i == $Y){$iscurrent = 'selected';}else{$iscurrent='';}
+            echo "<option value='$i' $iscurrent>$i</option>";
+
+          }
+          ?>
+        </select> 
+			</div>	
+			</div>
+			<div class="category"><label>Privacy:</label>
 				<select class="form-control" style="width:100%;" id="privacy" name="privacy">
 					<option value="2">Public</option>
 					<option value="1">Private</option>

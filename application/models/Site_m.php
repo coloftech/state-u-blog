@@ -93,9 +93,9 @@ class Site_m extends CI_Model
 	{
 		if ($info && is_string($info)) {
 
-			$query = $this->db->select('setting_value')
-				->from('site_setting')
-				->where(array('setting_name'=>$info,'site_id'=>$siteId))
+			$query = $this->db->select('page_content')
+				->from('pages')
+				->where(array('page_title'=>$info,'site_id'=>$siteId))
 				->get();
 			return $query->result();
 			}

@@ -42,6 +42,8 @@ class Auto_m extends CI_Model
         $config['query_string_segment'] = 'row';
 			
             $this->pagination->initialize($config);
+            
+date_default_timezone_set('Asia/Manila');
 	}
 	public function recent_post($value='')
 	{

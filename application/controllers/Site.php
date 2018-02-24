@@ -116,7 +116,7 @@ class Site extends CI_Controller {
 
 			if($sitesetting = $this->site_m->getSettings($info,$siteId)){
 
-			$data['about'] = $sitesetting[0]->setting_value;
+			$data['about'] = $sitesetting[0]->page_content;
 
 			$info_v = 'site/settingInfo';
 			$siteName = urldecode($info);

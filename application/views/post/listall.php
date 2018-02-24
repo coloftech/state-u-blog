@@ -217,17 +217,19 @@ $('#selectcategory').change(function(){
 						success: function(response){
 							console.clear();
 							console.log(response);	
-							if(response.stat == true){
+
+             				//window.location.reload() = true;
+							//if(response.stat == true){
 							$('#tr-'+post_id).remove();
 		             		$('header').notify('Post successfully remove', { position:"bottom right", className:"success" }); 
 
 
-							}else{
+							//}else{
 	
-		             		$('header').notify('Post is not remove', { position:"bottom right", className:"error" }); 
+		             		//$('header').notify('Post is not remove', { position:"bottom right", className:"error" }); 
 
 
-							}
+							//}
 
 						}
 					});

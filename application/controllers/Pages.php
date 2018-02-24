@@ -31,6 +31,32 @@ class Pages extends CI_Controller {
 		$data['site_title'] = 'List pages';
 		$this->template->load('admin','admin/pages/list_pages.php',$data);
 	}
+
+	public function edit_page($value='')
+	{
+
+
+		if($this->input->get()){
+			$page_id = $this->input->get('id');
+			$info = $this->pages_m->getPageById($page_id);
+
+			$data['page_title'] = $info[0]->page_title;
+			$data['page_id'] = $info[0]->page_id;
+			$data['page_content'] = $info[0]->page_content;
+			$data['site_id'] = $info[0]->site_id;
+			$data['parent_id'] = $info[0]->parent_id;
+			$data['page_title'] = $info[0]->page_title;
+		}
+		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
+
+
+		$data['parents'] = $this->pages_m->getParentPages();
+
+		$data['is_hidden'] = 'hidden';
+		$data['site_title'] = 'Edit page';
+		$this->template->load('admin','admin/pages/edit_page.php',$data);
+	}
+
 	public function add_page($value='')
 	{
 		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);

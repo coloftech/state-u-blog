@@ -41,6 +41,16 @@ class Pages_m extends CI_Model
 
 	}
 
+	public function getPageById($page_id=0,$site_id = 0)
+	{
+		if($page_id != 0){
+
+		return $this->db->get_where('pages',array('page_id'=>$page_id))->result();
+
+		}
+		return false;
+
+	}
 	public function save_page($data=false)
 	{
 		return $this->db->insert('pages',$data);

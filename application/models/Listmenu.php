@@ -28,7 +28,7 @@ class Listmenu extends CI_Model
      */
     function __construct()
     {
-    	parent::__construct();
+        parent::__construct();
                 $this->load->database();
     }
 
@@ -38,12 +38,12 @@ class Listmenu extends CI_Model
 
         $page = ($this->input->get('p')) ? $this->input->get('p') : 'bilar';
         $site_id  = $this->site_m->getSiteId($page);
-	    $this->db->select('*');
-	    $this->db->from('site_setting');
+        $this->db->select('*');
+        $this->db->from('pages');
         $this->db->where(array('site_id'=>$site_id));
-	    $this->db->order_by('parent_id', 'ASC');
-	    $result = $this->db->get()->result_array();
-	    return $result;
+        $this->db->order_by('parent_id', 'ASC');
+        $result = $this->db->get()->result_array();
+        return $result;
     }
 
     /**
@@ -78,35 +78,35 @@ class Listmenu extends CI_Model
                 $this->html[] = str_repeat( "\t", ( count( $parent_stack ) + 1 ) * 2 ) . '</ul>';
                 $this->html[] = str_repeat( "\t", ( count( $parent_stack ) + 1 ) * 2 - 1 ) . '</li>';
             }
-            elseif ( !empty( $children[$option['value']['id']] ) )
+            elseif ( !empty( $children[$option['value']['page_id']] ) )
             {
                 $tab = str_repeat( "\t", ( count( $parent_stack ) + 1 ) * 2 - 1 );
 
                 // HTML for menu item containing childrens (open)
                 
-                    $path =  site_url("c=site&f=view&p=$page&i=").$this->site_m->getSettingNameById($option['value']['id']);//'?c=info&m=getinfo&q='.$option['value']['site_id'];
+                    $path =  site_url("c=site&f=view&p=$page&i=").$option['value']['page_title'];//'?c=info&m=getinfo&q='.$option['value']['site_id'];
                 
                 $this->html[] = sprintf(
                     '%1$s<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">%3$s <span class="caret"></span></i></a>',
                     $tab,   // %1$s = tabulation
                     $path,   // %2$s = link (URL)
-                    ucfirst($option['value']['setting_name'])   // %3$s = setting_name
+                    ucfirst($option['value']['page_title'])   // %3$s = setting_name
                 ); 
                 $this->html[] = $tab . "\t" . '<ul  class="dropdown-menu">';
 
                 array_push( $parent_stack, $option['value']['parent_id'] );
-                $parent = $option['value']['id'];
+                $parent = $option['value']['page_id'];
             }
             else{
                 // HTML for menu item with no children (aka "leaf") 
                  
-                    $path =  site_url("c=site&f=view&p=$page&i=").$this->site_m->getSettingNameById($option['value']['id']);
+                    $path =  site_url("c=site&f=view&p=$page&i=").$option['value']['page_title'];
                 
                 $this->html[] = sprintf(
                     '%1$s<li><a href="%2$s">%3$s</a></li>',
                     str_repeat( "\t", ( count( $parent_stack ) + 1 ) * 2 - 1 ),   // %1$s = tabulation
                     $path,   // %2$s = link (URL)
-                    ucfirst($option['value']['setting_name'])   // %3$s = setting_name
+                    ucfirst($option['value']['page_title'])   // %3$s = setting_name
                 );
         }
         }

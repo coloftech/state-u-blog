@@ -75,6 +75,10 @@ class Post extends CI_Controller {
 
 			$data['category'] =  $this->post_m->get_categories($post_id);
 			$data['site_id'] = $info[0]->site_id;
+			$time = strtotime($info[0]->date_posted);
+			$data['m'] = date('m',$time);
+			$data['d'] = date('d',$time);
+			$data['Y'] = date('Y',$time);
 			$tag = '';
 			if($tags =  $this->post_m->get_tagsById($post_id)){
 				foreach ($tags as $key) {
@@ -132,13 +136,18 @@ class Post extends CI_Controller {
 				exit();
 			}
 
+			$date_posted = $input->years.'-'.$input->months.'-'.$input->days.' '.date('h:m:s');
+
+			//var_dump($date_posted);
+			//exit();
 
 			$info = array(
 				'post_title' => $input->title,
 				'slug'=>$slug,
 				'post_content'=>$input->desc,
 				'user_id'=>$this->uid,
-				'site_id'=>$input->group
+				'site_id'=>$input->group,
+				'date_posted'=>$date_posted
 			 );
 			if ($post_id= $this->post_m->save_post_info($info)) {
 				
@@ -184,12 +193,14 @@ class Post extends CI_Controller {
 			$slug = $this->slug->create($input->title);
 			$keywords = explode(',', $input->title.','.$input->keyword);
 
+			$date_posted = $input->years.'-'.$input->months.'-'.$input->days.' '.date('h:m:s');
 			$info = array(
 				'post_title' => $input->title,
 				'slug'=>$slug,
 				'post_content'=>$input->desc,
 				'user_id'=>$this->uid,
-				'site_id'=>$input->group
+				'site_id'=>$input->group,
+				'date_posted'=>$date_posted
 			 );
 			if ($this->post_m->update_post_info($info,$input->post_id)) {
 				$update_tag = '';$update_file = '';
@@ -255,7 +266,8 @@ class Post extends CI_Controller {
 			
 			if($upload = $this->upload('feature',$file,$i)){
 				$uploaded = $this->post_m->save_file_array(array_filter(array(($upload))));
-			echo json_encode(array('stats'=>true,'link'=>$upload['link'],'u_key'=>$upload['u_key']));
+				$link = base_url('public/uploads/image/');
+			echo json_encode(array('stats'=>true,'link'=>$link.$upload['newfilename'],'u_key'=>$upload['u_key']));
 		}else{
 
 		}
@@ -401,17 +413,17 @@ class Post extends CI_Controller {
 	 						$ftype = $type;
 	 				}
 
-	 				$upload_path = 'public/';
+	 				$upload_path ='public/uploads/image/';//UPLOADPATH;//base_url('public/');
 	 				if($type = 'image'){
 	 					
-				            $dirname = $this->username;
-
+				           // $dirname = $this->username;
+	 					/*
 							$target_dir = $upload_path . 'uploads/';
 
 							if (!file_exists($target_dir)) {
 				               	mkdir($target_dir,0777);
 							} 
-							$target_dir = $target_dir . 'images/';
+							$target_dir = $target_dir . 'image/';
 
 							if (!file_exists($target_dir)) {
 				               	mkdir($target_dir,0777);
@@ -419,10 +431,11 @@ class Post extends CI_Controller {
 							$target_dir = $target_dir . date('Y'). '/';
 
 							if (!file_exists($target_dir)) {
-				               	mkdir($target_dir,0777);
+				              	mkdir($target_dir,0777);
 							} 
+							*/
 
-	 					$upload_path = $target_dir;
+	 					//$upload_path = $target_dir;
 	 				}else{
 
 

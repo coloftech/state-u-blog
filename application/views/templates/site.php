@@ -50,14 +50,23 @@
     <div class="container">
         
     <div class="footer-top">
-        <div class="col-md-4">
-            <h3>ABOUT US</h3>
+        <div class="col-md-4 aboutus">
+            <h3>HOSTED SITE</h3>
+            <ul id="menu-campuses-menu" class="menu">
+                <?=$this->auto_m->getSites()?>
+</ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 recentspost">
             <h3>RECENT POST</h3></div>
-        <div class="col-md-4">
+        <div class="col-md-4 campuses">
             
             <h3>BISU CAMPUSES</h3>
+<ul id="menu-campuses-menu" class="menu"><li class="menu-balilihan-campus"><a href="http://balilihan.bisu.edu.ph">Balilihan Campus</a></li>
+<li class="menu-bilar-campus"><a href="http://bilar.bisu.edu.ph">Bilar Campus</a></li>
+<li class="menu-calape-campus"><a href="http://calape.bisu.edu.ph">Calape Campus</a></li>
+<li class="menu-candijay-campus"><a href="http://candijay.bisu.edu.ph">Candijay Campus</a></li>
+<li class="menu-clarin-campus"><a href="http://bisuclarin.edu.ph">Clarin Campus</a></li>
+</ul>
         </div>
     </div>
     <div class="footer-center"><a href="#top" class="btn btn-top">TOP</a></div>
