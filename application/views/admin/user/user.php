@@ -2,7 +2,7 @@
 	<div class="panel">
 		<div class="panel-heading"><h4>User <button class="btn btn-default" id="addhost"><i class="fa fa-plus"></i></button></h4> </div>
 
-		<div class="panel-body add-form" style="display:none;">
+		<div class="panel-body add-form" style="display:<?=$display;?>">
 			<div class="col-md-12">
 
 				<div class="form-responsive">

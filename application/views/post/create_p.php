@@ -367,27 +367,14 @@
 
 </div> <!-- end of content -->
 
+<style>
+/*to disable the upload image from computer uncomment this css code.*/
+.note-group-select-from-files {
+  display: none;
+}
 
-<script type="text/javascript">
-	
+</style>
 
-$('#desc').summernote({
-
-minHeight: 250,
-            toolbar: [
-                ['fontsize', ['bold', 'italic', 'fontsize']],
-                ['style', ['highlight','underline', 'clear','color']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['para', ['paragraph','ul', 'ol',]],
-                ['height', ['height']],
-                ['insert', ['picture','link']],
-                ['table', ['table']],
-                ['view', ['fullscreen', 'codeview']],
-                ['help', ['help']]
-            ]
-});
-
-</script>
 
 <script type="text/javascript">
 	

@@ -159,28 +159,14 @@
 </div>
 
 
+<style>
+/*to disable the upload image from computer uncomment this css code.*/
+.note-group-select-from-files {
+  display: none;
+}
 
+</style>
 
-
-<script type="text/javascript">
-	
-$('#desc').summernote({
-
-minHeight: 250,
-            toolbar: [
-                ['fontsize', ['bold', 'italic', 'fontsize']],
-                ['style', ['highlight','underline', 'clear','color']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['para', ['paragraph','ul', 'ol',]],
-                ['height', ['height']],
-                ['insert', ['picture','link']],
-                ['table', ['table']],
-                ['view', ['fullscreen', 'codeview']],
-                ['help', ['help']]
-            ]
-});
-
-</script>
 
 <script type="text/javascript">
 	$('#btnpage').on('click',function(){
@@ -207,7 +193,7 @@ minHeight: 250,
 		 	  type: 'post',
 		      url: '<?=site_url('c=pages&f=save_page');?>',
 		      data: data,
-		      //dataType:'json',
+		      dataType:'json',
 		      success: function (resp) {
 
 		      		console.clear();
@@ -215,9 +201,10 @@ minHeight: 250,
 					console.log(resp);
 					if(resp.stats == true){
 
+		            	$('.user-profile').notify('Page added succesfully.', { position:"bottom right", className:"success" }); 
 					}else{
 
-					//console.log(resp);
+		            	$('.user-profile').notify('Page not added!', { position:"bottom right", className:"error" }); 
 					}
 		      }
 			});
@@ -263,8 +250,8 @@ minHeight: 250,
 		      dataType:'json',
 		      success: function (resp) {
 		      		console.clear();
-					if(resp.stats == true){
 					console.log(resp);
+					if(resp.stats == true){
 						//$('#opt_parent').innerHTML(resp.msg);
 
                     $('#opt_parent').empty();

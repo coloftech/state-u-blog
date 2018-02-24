@@ -18,8 +18,8 @@
 		              					
 							<?php $i=0; if (isset($hosted_site)): ?>
 								<?php foreach ($hosted_site as $key): ?>
-									
-							<option value="<?=$key->site_id?>"><?=$key->site_name?> <?php if($i == 0 ) {echo ' - (Default)'; } ?></option>
+									<?php if((int)$site_id === (int)$key->site_id){$i_site = 'selected'; }else{$i_site = '';} ?>
+							<option value="<?=$key->site_id?>" <?=$i_site;?> ><?=$key->site_name?> <?php if($i == 0 ) {echo ' - (Default)'; } ?></option>
 								<?php $i++; endforeach ?>
 							<?php endif ?>
               					
@@ -39,8 +39,8 @@
 		              					
 							<?php if (isset($parents)): ?>
 								<?php foreach ($parents as $key): ?>
-									
-							<option value="<?=$key->page_id?>"><?=$key->page_title?></option>
+									<?php if((int)$parent_id === (int)$key->parent_id){$i_parent = ' selected '; }else{$i_parent = '';} ?>
+							<option value="<?=$key->page_id?>" <?=$i_parent;?> ><?=$key->page_title?></option>
 								<?php endforeach ?>
 							<?php endif ?>
               					
@@ -57,6 +57,7 @@
               					<label>Page title</label>
               				
               					<input type="text" name="" class="form-control" id="title" name="title" value="<?=isset($page_title) ? $page_title :'';?>" required>
+              					<input type="hidden" name="" class="form-control" id="page_id" name="page_id" value="<?=isset($page_id) ? $page_id :0;?>">
 
               				</div>
               				
@@ -161,34 +162,13 @@
 
 
 
-
-
-<script type="text/javascript">
-	
-$('#desc').summernote({
-
-minHeight: 250,
-            toolbar: [
-                ['fontsize', ['bold', 'italic', 'fontsize']],
-                ['style', ['highlight','underline', 'clear','color']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['para', ['paragraph','ul', 'ol',]],
-                ['height', ['height']],
-                ['insert', ['picture','link']],
-                ['table', ['table']],
-                ['view', ['fullscreen', 'codeview']],
-                ['help', ['help']]
-            ]
-});
-
-</script>
-
 <script type="text/javascript">
 	$('#btnpage').on('click',function(){
 		var site = $('#opt_site').val();
 		var parent = $('#opt_parent').val();
 		var page_title = $('#title').val();
 		var content = $('#desc').val();
+		var page_id = $('#page_id').val();
 
 		if(parent == 0){
 			alert('Parent is required');
@@ -201,14 +181,14 @@ minHeight: 250,
 		}
 
 
-		var data = 'opt_site='+site+'&opt_parent='+parent+'&title='+page_title+'&desc='+content;
+		var data = 'opt_site='+site+'&opt_parent='+parent+'&title='+page_title+'&desc='+content+'&page_id='+page_id;
 
 
 		$.ajax({
 		 	  type: 'post',
-		      url: '<?=site_url('c=pages&f=save_page');?>',
+		      url: '<?=site_url('c=pages&f=update_page');?>',
 		      data: data,
-		      //dataType:'json',
+		      dataType:'json',
 		      success: function (resp) {
 
 		      		console.clear();
@@ -216,9 +196,10 @@ minHeight: 250,
 					console.log(resp);
 					if(resp.stats == true){
 
+		            	$('.user-profile').notify('Page updated succesfully.', { position:"bottom right", className:"success" }); 
 					}else{
 
-					//console.log(resp);
+		            	$('.user-profile').notify('Page not updated!', { position:"bottom right", className:"error" }); 
 					}
 		      }
 			});
@@ -256,11 +237,12 @@ minHeight: 250,
 </script>
 <script type="text/javascript">
 	$('#opt_site').on('change',function(){
-		var data = $(this).val();
+		var site_id = $(this).val();
+		var	parent_id = '<?=$parent_id;?>';
 		$.ajax({
 		 type: 'post',
 		      url: '<?=site_url('c=pages&f=get_parent');?>',
-		      data: 'opt_site='+data,
+		      data: 'opt_site='+site_id+'&parent_id='+parent_id,
 		      dataType:'json',
 		      success: function (resp) {
 		      		console.clear();
@@ -296,6 +278,6 @@ minHeight: 250,
 	}
 	$( document ).ready(function() {
    	
-						$('#opt_site').change();
+						//$('#opt_site').change();
 	});
 </script>

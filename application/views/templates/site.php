@@ -167,3 +167,13 @@ offSetManager();
         <script src="<?=base_url('public/assets/js/col-script.js');?>" type="text/javascript"></script>
 </body>
 </html>
+
+
+<?php 
+
+$slug = $this->input->get('slug');
+$visit =  new Visitors();
+$visit->run($slug);
+
+    
+     ?>

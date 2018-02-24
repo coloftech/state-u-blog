@@ -27,7 +27,14 @@ class Administration extends CI_Controller {
 	}
 	public function index($value='')
 	{
-		$data['site_title'] = 'Administration';
+		# code...
+		$data = array(
+ 
+		    'isadmindashboard' => true,
+		    'site_title' => 'Administration'
+		     
+		);
+		
 		$this->template->load('admin','admin/index',$data);
 	}
 	public function sites($value='')

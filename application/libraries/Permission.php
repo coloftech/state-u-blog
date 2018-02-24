@@ -50,6 +50,21 @@ class Permission
 			return false;
 		}
 	}
+
+	public function update_user($username=false,$password=false,$user_type=0,$email='')
+	{
+		if($username && $password){
+			$data = array(
+				'user_pass'=>$this->e_pass($this->salt . $password),
+				'status'=>$user_type,
+				'user_email'=>$email
+			);
+			$this->ci->db->where('user_name',$username);
+			return $this->ci->db->update('users',$data);
+		}else{
+			return false;
+		}
+	}
 	public function allow_user($user_id=false,$site_id=false,$user_type=0)
 	{
 		if($user_id && $site_id){

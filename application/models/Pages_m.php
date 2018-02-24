@@ -53,7 +53,15 @@ class Pages_m extends CI_Model
 	}
 	public function save_page($data=false)
 	{
+		//var_dump($data);exit();
 		return $this->db->insert('pages',$data);
+	}
+
+	public function update_page($data=false,$page_id= 0)
+	{
+		//var_dump($data);exit();
+			$this->db->where('page_id',$page_id);
+		return $this->db->update('pages',$data);
 	}
 
 	public function save_parent($data=false)
@@ -64,11 +72,6 @@ class Pages_m extends CI_Model
 
 		return $this->db->insert('pages',$data);
 		}
-	}
-	public function update_page($page_id=0,$data='')
-	{
-		$this->db->where('page_id',$page_id);
-		return $this->db->update('pages',$data);
 	}
 	public function is_pageTitle($title='')
 	{

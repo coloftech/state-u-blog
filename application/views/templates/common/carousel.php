@@ -11,7 +11,7 @@
 
         <!-- First slide -->
         <div class="item active skyblue-vh">
-          <img src="<?=base_url();?>public/images/bisu-2.png"  data-animation="animated fadeInDown">
+          <img src="<?=base_url();?>public/images/bisu-2.png"  data-animation="animated zoomIn">
           <div class="carousel-caption">
             <h3 data-animation="animated zoomInLeft" class="caption-title-top">
              Bohol Island State University <br /><span class="campus">Bilar Campus</span>
@@ -24,13 +24,14 @@
 
         <!-- Second slide -->
         <div class="item skyblue-vw">
-          <img src="<?=base_url();?>public/images/post-img.png"  data-animation="animated fadeInDown">
+          <img src="<?=base_url();?>public/images/4.png"  data-animation="animated zoomIn">
           <div class="carousel-caption">
-            <h3 class="icon-container" data-animation="animated bounceInDown">
+            <h3  class="caption-title-top" data-animation="animated bounceInLeft">
+             Bohol Island State University <br /><span class="campus">Bilar Campus</span>
 
             </h3>
             <h3 data-animation="animated bounceInUp">
-
+            A green university for prosperity.
             </h3>
 
           </div>

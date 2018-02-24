@@ -47,6 +47,8 @@ class Pages extends CI_Controller {
 			$data['parent_id'] = $info[0]->parent_id;
 			$data['page_title'] = $info[0]->page_title;
 		}
+
+		//var_dump($data);exit();
 		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
 
 
@@ -71,12 +73,20 @@ class Pages extends CI_Controller {
 	public function get_parent(){
 		if($this->input->post()){
 			$input = (object)$this->input->post();
-
+			$selected = '';
 			if($parents = $this->pages_m->getParentPages(0,$input->opt_site)){
+
+			//var_dump($parents);
+			//exit();
 				$parent = '<select class="form-control" id="opt_parent" name="opt_parent">';
 				foreach ($parents as $key) {
-					# code...
-					$parent .= '<option value="'.$key->page_id.'">'.$key->page_title.'</option>';
+					
+					if(isset($input->parent_id)){
+						if($key->parent_id == $input->parent_id){
+							$selected = ' selected ';
+						}
+					}
+					$parent .= '<option value="'.$key->page_id.$selected .'" >'.$key->page_title.'</option>';
 				}
 				$parent .= '</select>';
 
@@ -94,7 +104,8 @@ class Pages extends CI_Controller {
 	{
 		if ($this->input->post()) {
 			$input = (object) $this->input->post();
-
+			//var_dump($input);
+			//exit();
 			if(empty($input->opt_parent)){
 				echo json_encode(array('stats'=>false,'msg'=>'Parent is required'));
 				exit();
@@ -108,8 +119,39 @@ class Pages extends CI_Controller {
 				echo json_encode(array('stats'=>false,'msg'=>'Page Title already exist'));
 				exit();
 			}
-
+			//var_dump($input->desc);exit();
 			if($this->pages_m->save_page(array('page_title'=>$input->title,'site_id'=>$input->opt_site,'parent_id'=>$input->opt_parent,'page_content'=>$input->desc))){
+				echo json_encode(array('stats'=>true));
+			}else{
+				echo json_encode(array('stats'=>false,'msg'=>'Post unsuccessful;'));
+			}
+
+		}
+	}
+
+	public function update_page($value='')
+	{
+		if ($this->input->post()) {
+			$input = (object) $this->input->post();
+
+			if(empty($input->opt_parent)){
+				echo json_encode(array('stats'=>false,'msg'=>'Parent is required'));
+				exit();
+			}
+			if(empty($input->title)){
+				echo json_encode(array('stats'=>false,'msg'=>'Title is required'));
+				exit();
+			}
+			if($page = $this->pages_m->getPage($input->title,$input->opt_site)){
+				if($page[0]->page_id != $input->page_id){
+
+				echo json_encode(array('stats'=>false,'msg'=>'Page Title already used.'));
+				exit();
+				}
+			}
+			//var_dump($input->desc);exit();
+
+			if($this->pages_m->update_page(array('page_title'=>$input->title,'site_id'=>$input->opt_site,'parent_id'=>$input->opt_parent,'page_content'=>$input->desc),$input->page_id)){
 				echo json_encode(array('stats'=>true));
 			}else{
 				echo json_encode(array('stats'=>false,'msg'=>'Post unsuccessful;'));

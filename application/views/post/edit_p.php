@@ -324,26 +324,15 @@
 </div> <!-- end of content -->
 
 
-<script type="text/javascript">
-	
+<style>
+/*to disable the upload image from computer uncomment this css code.*/
+.note-group-select-from-files {
+  display: none;
+}
 
-$('#desc').summernote({
+</style>
 
-minHeight: 250,
-            toolbar: [
-                ['fontsize', ['bold', 'italic', 'fontsize']],
-                ['style', ['highlight','underline', 'clear','color']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['para', ['paragraph','ul', 'ol',]],
-                ['height', ['height']],
-                ['insert', ['picture','link']],
-                ['table', ['table']],
-                ['view', ['fullscreen', 'codeview']],
-                ['help', ['help']]
-            ]
-});
 
-</script>
 
 <script type="text/javascript">
 	
@@ -489,7 +478,7 @@ minHeight: 250,
 					console.log(resp);
 					if(resp.stats == true){
 						$('#previewImg2').removeClass('hidden');
-						$('#previewImg2').attr('src','<?=base_url();?>'+resp.link);
+						$('#previewImg2').attr('src',resp.link);
 						$('#featuredimg_url').val(resp.u_key);
 						setTimeout(function () {
 							$('#uploadModal').modal('hide');

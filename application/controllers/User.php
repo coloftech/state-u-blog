@@ -27,6 +27,7 @@ class User extends CI_Controller {
 	}
 	public function index($value='')
 	{
+		$data['display'] = 'none';
 		$data['list_user'] = $this->permission->list_user();
 		//var_dump($data['list_user']);
 		$data['site_title'] = 'User';
@@ -35,9 +36,9 @@ class User extends CI_Controller {
 	public function create($value='')
 	{
 
-		
+		$data['display'] = 'block';
 		$data['site_title'] = 'Create user';
-		$this->template->load('admin','admin/user/create_user',$data);
+		$this->template->load('admin','admin/user/user',$data);
 	}
 
 	public function add_user($value='')
@@ -53,6 +54,22 @@ class User extends CI_Controller {
 				echo json_encode(array('stats'=>false,'msg'=>'No input'));
 			}
 		}
+	}
+	public function change_pass()
+	{
+		if ($this->input->post()) {
+			$input = (object) $this->input->post();
+
+			if($update = $this->permission->update_user($this->username,$input->password,0,$input->email)){
+				echo "Password change.";
+				redirect('c=user');
+			}else{
+				echo "No action done.";
+				redirect('c=user');
+			}
+		}
+		$data['site_title'] = 'Change password';
+		$this->template->load('admin','admin/user/change_pass',$data);
 	}
 
 

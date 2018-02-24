@@ -23,7 +23,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->session->userdata['username'];?></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?=site_url('u/editprofile');?>"><i class="fa fa-fw fa-user"></i> Edit Profile</a></li>
-                    <li><a href="<?=site_url('u/changepass');?>"><i class="fa fa-fw fa-cog"></i> Change Password</a></li>
+                    <li><a href="<?=site_url('c=user&f=change_pass');?>"><i class="fa fa-fw fa-cog"></i> Change Password</a></li>
                     <li class="divider"></li>
                     <li><a href="<?=site_url("c=site&f=logout");?>"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
                 </ul>
