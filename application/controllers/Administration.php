@@ -21,6 +21,7 @@ class Administration extends CI_Controller {
 		 $this->username = $this->session->userdata['username'];
 
 		$this->load->model('admin_m');
+		$this->load->model('site_m');
 
 
 		$this->auto_m->free_space();
@@ -39,11 +40,17 @@ class Administration extends CI_Controller {
 	}
 	public function sites($value='')
 	{
+		$is_display = 'none';
+		if($this->input->get('a')){
+
+		$is_display = 'block';
+		}
+		$data['is_display'] = $is_display;
 		$site_ids = $this->permission->list_user_sites($this->uid);
 		$site_id = $site_ids[0]->site_id;
 
 		$data['users'] = $this->permission->list_user();
-
+		$data['site_category'] = $this->site_m->getSiteCategory();
 		$data['hosted_site'] = $this->admin_m->hosted_sites();
 		$data['site_title'] = 'Hosted Site';
 		$this->template->load('admin','admin/hostedSites',$data);
@@ -53,7 +60,13 @@ class Administration extends CI_Controller {
 		if ($this->input->post()) {
 			$input =(object) $this->input->post();
 
-			$is_added = $this->admin_m->save_site($input->site_name,$input->site_path);
+			if(empty($input->site_path)){
+				$path = $this->slug->create($input->site_name);
+			}else{
+				$path = $input->site_path;
+			}
+
+			$is_added = $this->admin_m->save_site($input->site_name,$path,$input->category);
 		}
 		redirect('c=administration&f=sites');
 	}

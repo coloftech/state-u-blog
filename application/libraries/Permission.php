@@ -166,7 +166,7 @@ class Permission
 			$query = $this->ci->db->select('site.*,site_users.status as user_type ')
 							->from('site')
 							->join('site_users','site_users.site_id = site.site_id','LEFT')
-							->where(array('user_id'=>$user_id))
+							//->where(array('user_id'=>$user_id))
 							->get();
 			//$query = $this->ci->db->get_where('site_users',array('user_id'=>$user_id));
 			if($result = $query->result()){

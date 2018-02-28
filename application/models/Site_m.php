@@ -38,6 +38,28 @@ class Site_m extends CI_Model
 
 	}
 
+
+	public function getSiteCategory($category = false){
+		if($category){
+
+		return $this->db->where('site_category',$category)->get('site_category')->result();
+
+		}
+		return $this->db->get('site_category')->result();
+
+	}
+
+	public function getSiteColleges($category = false){
+		if($category){
+
+		return $this->db->where('site_category',$category)->get('site')->result();
+
+		}
+		return false;
+
+	}
+
+
 	public function getSiteName($path=false,$site_id = false)
 	{
 		if($path){

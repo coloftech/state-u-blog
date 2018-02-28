@@ -24,25 +24,40 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
                     <div class="nav navbar-nav"></div>
                     <ul class="nav navbar-nav">
 
-                        <li class="dropdown home">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-home"></i> <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <?php echo $this->auto_m->getSites(); ?>
-
-                                <?php if ($this->permission->is_loggedIn()): ?>
-                              <li role="separator" class="divider"></li>
-                              <li><a href="<?=site_url("c=administration");?>">Administration</a></li>
                                   
-                              <?php endif ?>
+                               <?php if ($this->auto_m->getColleges(2)): ?>
+                              
+                            <li class="dropdown home">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-home"></i></i> <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <?php echo $this->auto_m->getColleges(2); ?>
 
-                            </ul>
+                                </ul>
                           </li>
+                          
+                          <?php endif ?>
+                          <?php if ($this->auto_m->getColleges(1)): ?>
+                              
+                            <li class="dropdown home">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Colleges <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <?php echo $this->auto_m->getColleges(1); ?>
+
+                                </ul>
+                          </li>
+                          
+                          <?php endif ?>
+
+                         
+
                           <?php echo $this->auto_m->menu_top(); ?>
                       <?php /*  <li><a href='<?=site_url("c=site&f=view&p=$page&i=about");?>'>About</a></li>
                         <li><a href='<?=site_url("c=site&f=view&p=$page&i=services");?>'>Services</a></li>
                         */ ?>
-                        <li><a href="<?=site_url("c=site&f=view&p=$page&i=contact");?>">Contact</a></li>
+                        <li class="hidden"><a href="<?=site_url("c=site&f=view&p=$page&i=contact");?>">Contact</a></li>
                         <?php if ($this->permission->is_loggedIn()): ?>
+
+                        <li><a href="<?=site_url("c=administration");?>">Administration</a></li>
                         <li><a href="<?=site_url("c=site&f=logout");?>">Logout</a></li>
                         <?php else: ?>
                         <li><a href="<?=site_url("c=site&f=login");?>">Login</a></li>

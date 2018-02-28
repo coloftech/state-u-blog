@@ -60,7 +60,17 @@
 
 
   </body>
-     
+    
+<?php if (isset($editform) == true): ?>
+<style>
+/*to disable the upload image from computer uncomment this css code.*/
+.note-group-select-from-files {
+  display: none;
+}
+
+</style> 
+
+
 <script type="text/javascript">
     
 
@@ -87,7 +97,7 @@ $('#desc').summernote({
   ],
   height: 250
 });
-document.getElementsByClassName('note-group-image-url')[0].insertAdjacentHTML('afterend','<p class="sober"><input   type="file" name="note_upload" id="note_upload" class="form-control "/><button type="button" id="btn-summernote" class="btn btn-default">Upload</button><div class="upload_img btn"></div> </p>');
+document.getElementsByClassName('note-group-image-url')[0].insertAdjacentHTML('afterend','<p class="sober"><input   type="file" name="note_upload" id="note_upload" class="form-control " accept="image/x-png,image/gif,image/jpeg" /><button type="button" id="btn-summernote" class="btn btn-default">Upload</button><div class="upload_img btn"></div> </p>');
 
 
 $('#btn-summernote').on('click',function(){
@@ -104,7 +114,7 @@ $('#btn-summernote').on('click',function(){
         i_upload(data);
 
      }else{
-        alert('File is to big');
+        $('#note_upload').notify('File is to big', { position:"bottom right", className:"error" });
      }
 
 });
@@ -172,9 +182,11 @@ $('#btn-summernote').on('click',function(){
                     $('.note-image-btn').removeAttr("disabled").removeClass("disabled");
 
                         setTimeout(function () {
-                            //$('#uploadModal').modal('hide');
+                            $('.note-image-btn').click();
                         },1000);
 
+                    }else{
+                      $('#note_upload').notify(resp.msg, { position:"bottom right", className:"error" });
                     }
               },
                  complete: function() {
@@ -192,4 +204,7 @@ $('#btn-summernote').on('click',function(){
             return false;
         }
 </script>
+
+    
+<?php endif ?>
 </html>

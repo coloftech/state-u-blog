@@ -29,10 +29,11 @@ class Site extends CI_Controller {
 		$this->load->model('site_m');
 		$this->load->model('user_m');
 		$this->load->model('post_m');
+		$this->load->model('pages_m');
 	}
 	public function index()
 	{
-
+		$data['is_index'] = true;
 		$limit = 5;
 		$start = $this->input->get('row') ? $this->input->get('row') : 0;
 		$total_rows = count($this->post_m->get_site_post());
@@ -87,6 +88,7 @@ class Site extends CI_Controller {
 		$siteId = isset($site[0]->site_id) ? $site[0]->site_id : 1 ;
 
 
+
 		$info = $this->input->get('i') ? $this->input->get('i') : 'post';
 
 		if($info == 'post'){
@@ -127,7 +129,9 @@ class Site extends CI_Controller {
 
 
 		$data['site_title'] = $siteName;
-		
+		$data['list_pages'] = $this->pages_m->list_pages($siteId,3);
+		$data['sidebar_pages'] = $this->pages_m->list_pages($siteId);
+
 		if(empty($info_v)){
 
 		$info_v = $this->info($page,$info);
@@ -185,6 +189,7 @@ class Site extends CI_Controller {
 					if($site_id =  $this->site_m->getSiteId($page)){
 
 						$info = $this->post_m->get_postBySlug($info,$site_id);
+						$data['sidebar_pages'] = $this->pages_m->list_pages($site_id);
 
 					}
 				}
@@ -199,9 +204,12 @@ class Site extends CI_Controller {
 		}else{
 			$data['site_title'] = 'Read post';
 		}
+		$data['site_path'] = $page;
 
-			
-
+		$data['link'] = site_url('c=site&f=read&p='.$page.'&i='.$info[0]->slug);
+		$data['meta_title'] = $info[0]->post_title;
+		$data['description'] = $this->auto_m->limit_300($info[0]->post_content);
+		$data['featured_image'] = $this->post_m->get_featuredImg($info[0]->post_id);
 		$this->template->load(false,'site/read',$data);
 
 	}

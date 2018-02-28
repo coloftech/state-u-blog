@@ -3,11 +3,9 @@
 		<div class="panel-heading"><h4>Add new page</h4></div>
 		<div class="panel-body">
 			<div class="form-responsive">
-				<form class="form form-horizontal">
+				<form class="form form-horizontal" id="frmpage" name="frmpage" >
 					<div class="form-responsive">
 						
-						<div class="form-responsive form-about" >
-              		<form class="form form-horizontal" id="frmpage" name="frmpage" method="post" action="#">
 
               			<div class="form-group">
 
@@ -56,7 +54,7 @@
               					
               					<label>Page title</label>
               				
-              					<input type="text" name="" class="form-control" id="title" name="title" value="<?=isset($page_title) ? $page_title :'';?>" required>
+              					<input type="text" class="form-control" id="title" name="title" value="<?=isset($page_title) ? $page_title :'';?>" required>
               					<input type="hidden" name="" class="form-control" id="page_id" name="page_id" value="<?=isset($page_id) ? $page_id :0;?>">
 
               				</div>
@@ -78,12 +76,10 @@
               				
               				<div class="col-md-12">
               					
-              				<label></label><button type="button" class="btn btn-success" id="btnpage">Publish</button> <button class="btn btn-warning pull-right hidden">Unpublish</button>
+              				<label></label><button type="submit" class="btn btn-success" id="btnpage">Publish</button> <button class="btn btn-warning pull-right hidden">Unpublish</button>
               					
               				
               				</div>
-              			</div>
-              		</form>
               	</div>
 
 					</div>
@@ -160,54 +156,52 @@
 </div>
 </div>
 
-
-
 <script type="text/javascript">
-	$('#btnpage').on('click',function(){
-		var site = $('#opt_site').val();
+	
+		$('#frmpage').on('submit',function(){
+
 		var parent = $('#opt_parent').val();
 		var page_title = $('#title').val();
-		var content = $('#desc').val();
 		var page_id = $('#page_id').val();
 
 		if(parent == 0){
 			alert('Parent is required');
 			return false;
 		}
-
 		if(page_title == ''){
 			alert('Page Title is required');
 			return false;
 		}
 
 
-		var data = 'opt_site='+site+'&opt_parent='+parent+'&title='+page_title+'&desc='+content+'&page_id='+page_id;
+			var data = $(this).serialize();
 
-
-		$.ajax({
-		 	  type: 'post',
+			$.ajax({
+		      type: 'post',
 		      url: '<?=site_url('c=pages&f=update_page');?>',
-		      data: data,
+		      data: data+'&page_id='+page_id,
 		      dataType:'json',
 		      success: function (resp) {
+		  
+			  			console.clear();
+						console.log(resp);
 
-		      		console.clear();
+						if(resp.stats == true){
 
-					console.log(resp);
-					if(resp.stats == true){
+			            	$('.user-profile').notify('Page updated succesfully.', { position:"bottom right", className:"success"
+			            	 }); 
+						}else{
 
-		            	$('.user-profile').notify('Page updated succesfully.', { position:"bottom right", className:"success" }); 
-					}else{
-
-		            	$('.user-profile').notify('Page not updated!', { position:"bottom right", className:"error" }); 
-					}
+			            	$('.user-profile').notify('Page not updated!', { position:"bottom right", className:"error" }); 
+						}	
 		      }
 			});
-		
-		return false;
-	});
-</script>
 
+
+      		return false;
+		});
+
+</script>
 <script type="text/javascript">
 	$('#frmparent').on('submit',function(){
 

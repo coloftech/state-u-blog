@@ -47,19 +47,33 @@ class Auto_m extends CI_Model
 
         $this->load->library('visitors');
 	}
-	public function recent_post($value='')
+	public function recent_post($value=10)
 	{
 		$this->load->model('post_m');
 		$html = '';
-		if($recents = $this->post_m->recent_post()){
+		if($recents = $this->post_m->recent_post(false,5)){
 
 			foreach ($recents as $key) {
 				# code...
-				$html.= "<li><i class='fa fa-angle-right'></i> <a href='".site_url("c=site&f=read&p=$key->site_path&i=$key->slug")."' >$key->post_title</a></li>";
+				$html.= "<li><a href='".site_url("c=site&f=read&p=$key->site_path&i=$key->slug")."' >$key->post_title</a></li>";
 			}
 		}
 		return $html;
 	}
+
+    public function recent_post_footer($value=10)
+    {
+        $this->load->model('post_m');
+        $html = '';
+        if($recents = $this->post_m->recent_post(false,$value)){
+
+            foreach ($recents as $key) {
+                # code...
+                $html.= "<li> <a href='".site_url("c=site&f=read&p=$key->site_path&i=$key->slug")."' >$key->post_title</a></li>";
+            }
+        }
+        return $html;
+    }
 
 	public function getSites()
 	{
@@ -69,13 +83,33 @@ class Auto_m extends CI_Model
 
 			foreach ($hosted_sites as $key) {
 				# code...
-				$html.= "<li><a href='".site_url("c=site&f=view&p=$key->site_path")."' >$key->site_name</a></li>";
+                if($key->site_id != 1){
+
+                $html.= "<li><a href='".site_url("c=site&f=view&p=$key->site_path")."' >$key->site_name</a></li>";
+                }
 			}
 		}else{
 			$html.= "<li><a href='".site_url()."' >Home</a></li>";
 		}
 		return $html;
 	}
+        public function getColleges($category = 0)
+    {
+        $this->load->model('site_m');
+        $html = '';
+        if($colleges = $this->site_m->getSiteColleges($category)){
+
+            foreach ($colleges as $key) {
+               
+                    
+                $html.= "<li><a href='".site_url("c=site&f=view&p=$key->site_path")."' >$key->site_name</a></li>";
+               
+            }
+        }
+
+        return $html;
+    }
+
 
 	public function free_space()
 	{

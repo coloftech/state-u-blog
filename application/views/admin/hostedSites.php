@@ -1,85 +1,10 @@
 <div class="wrapper admin-wrapper create">
 
-	<style type="text/css">
-		
-site-user. a {
-  color: #000;
-}
 
-.select-dropdown .dropdown dd,
-.select-dropdown .dropdown dt {
-  margin: 0px;
-  padding: 0px;
-}
-
-.select-dropdown .dropdown ul {
-  margin: -1px 0 0 0;
-}
-
-.select-dropdown .dropdown dd {
-  position: relative;
-}
-
-.select-dropdown .dropdown a,
-.select-dropdown .dropdown a:visited {
-  color: #fff;
-  text-decoration: none;
-  outline: none;
-  font-size: 12px;
-}
-
-.select-dropdown .dropdown dt a {
-  display: block;
-  padding:10PX 0;
-  min-height: 25px;
-  line-height: 24px;
-  overflow: hidden;
-  border: 0;
-  width: 100%;
-}
-
-   dt a span,
-.multiSel span {
-  cursor: pointer;
-  display: inline-block;
-  padding: 0 3px 2px 0;
-}
-
-.select-dropdown .dropdown dd ul {
-  background-color: #4F6877;
-  border: 0;
-  color: #fff;
-  display: none;
-  left: 0px;
-  padding: 2px 15px 2px 5px;
-  position: absolute;
-  top: 2px;
-  width: 100% !important;
-  list-style: none;
-  height: 100px;
-  overflow: auto;
-}
-
-.select-dropdown .dropdown span.value {
-  display: none;
-}
-
-.select-dropdown .dropdown dd ul li a {
-  padding: 5px;
-  display: block;
-}
-
-.select-dropdown .dropdown dd ul li a:hover {
-  background-color: #fff;
-}
-.hida{
-	color: #000;
-}
-	</style>
 	<div class="panel">
 		<div class="panel-heading"><h4>Hosted Site <button class="btn btn-default" id="addhost"><i class="fa fa-plus"></i></button></h4> </div>
 
-		<div class="panel-body add-form" style="display:none;">
+		<div class="panel-body add-form" style="display:<?=$is_display;?>">
 			<div class="col-md-12">
 
 				<div class="form-responsive">
@@ -92,32 +17,15 @@ site-user. a {
 							<label>Site path</label><input type="text" name="site_path" id="site_path" class="form-control"/>
 						</div>
 
-						<div class="form-group select-dropdown">
-							<label>Site user</label>
+						<div class="form-group">
+							<label>Site category</label>
+							<select class="form-control" name="category" id="category" required>
+								<?php foreach ($site_category as $key ): ?>
+									<option value="<?=$key->id?>"><?=$key->name?></option>
+								<?php endforeach ?>
+							</select>
 							
-							<dl class="dropdown"> 
-							  
-							    <dt>
-							    <a href="#">
-							      <span class="hida form-control" style="width:100% !important;color:#000;">Select</span>    
-							      <p class="multiSel" style="color:#000;"></p>  
-							    </a>
-							    </dt>
-							  
-							    <dd>
-							        <div class="mutliSelect">
-							            <ul>
-
-								<?php if (!empty($users)): ?>
-									<?php foreach ($users as $key ): ?>
-										<li><input  type="checkbox"  value="<?=$key->user_name?>" /> <?=$key->user_name ?></li>
-									<?php endforeach ?>
-								<?php endif ?>
-							            </ul>
-							        </div>
-							    </dd>
-							  <button>Filter</button>
-							</dl>
+							
 						</div>	
 						<div class="form-group">
 							<label></label><button class="btn btn-info">Save</button>
@@ -135,7 +43,8 @@ site-user. a {
 						<th>ID #</th>
 						<th>Site name</th>
 						<th>Site path</th>
-						<th></th>
+						<th>Action</th>
+						<th>Users</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -146,7 +55,9 @@ site-user. a {
 							<td><?=$key->site_id;?></td>
 							<td><?=$key->site_name;?></td>
 							<td><?=$key->site_path;?></td>
-							<td width="100px;"><button class="btn"><i class="fa fa-edit"></i></button><button class="btn"><i class="fa fa-remove"></i></button></td>
+							<td width="100px;"<button class="btn"><i class="fa fa-edit"></i></button> <button class="btn"><i class="fa fa-remove"></i></button></td>
+
+							<td><button class="btn"  data-toggle="modal"  data-target="#usermodal" ><i class="fa fa-plus"></i> Add user</button></td>
 						</tr>
 							<?php endforeach ?>
 						<?php endif ?>
@@ -156,6 +67,82 @@ site-user. a {
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- category modal -->
+<div class="row">
+	<!-- Modal -->
+<div id="usermodal" class="modal fade" role="dialog">
+<div class="modal-bg hidden">
+	<!--span class="loader"></span -->
+	<progress id="progressBar" value="0" maximum="100" style="width:300px;"></progress>
+	<h3 id="status"></h3>
+	<p id="loaded_n_total"></p>
+</div>
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add user</h4>
+      </div>
+      <div class="modal-body">
+        <p><div class="err_msg hidden"></div>	
+        <style type="text/css">
+        	 ul#list_users{
+        		list-style: none;
+        		padding: 0;
+        		margin: 0;
+        		margin-top: -2px;
+        		text-decoration: none;
+        		display: none;
+        		width: 99% !important;
+        		position: absolute;
+        	}
+        	 ul#list_users li{
+        		list-style: none;
+        		padding: 5px;
+        		margin: 0;
+        		margin-top: -10px;
+        		text-decoration: none;
+        		background-color: #000;
+        		color: #fff;
+        	}
+        </style>		
+		<form action="#" id="frmcat">
+
+			<div class="form-group">
+
+			<div class="col-md-12" style="margin:0;padding:0;margin-bottom: 10px;"><input type="text" name="txt_user_name" id="txt_user_name" class="form-control" style="padding: 2px;" /></div>
+			<div class="col-md-12"  style="margin:0;padding:0;margin-bottom: 10px;">
+			<ul id="list_users"><li>username</li></ul></div>
+			</div>
+
+			<div class="form-group">
+				<select class="form-control" id="site_id" name="site_id"></select>
+				
+			</div>
+
+
+			<div class="progress progress-striped active" style="width:100%">
+				<div class="progress-bar" style="width:0%;"></div>
+			</div>
+
+        		<div class="form-group" style="max-width:400px;">
+
+        			<input type="hidden" id="isselected" value="0">	
+        		</div>
+		</form>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" onClick="clearform('frmcat');">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </div>
 
 <script type="text/javascript">
@@ -175,46 +162,18 @@ $('#addhost').on('click',function(){
 });
 </script>
 
+
 <script type="text/javascript">
-	
-	/*
-	Dropdown with Multiple checkbox select with jQuery - May 27, 2013
-	(c) 2013 @ElmahdiMahmoud
-	license: https://www.opensource.org/licenses/mit-license.php
-*/
+	$('#txt_user_name').on('keyup',function(){
+		var user = $(this).val();
 
-$(".select-dropdown .dropdown dt a").on('click', function() {
-  $(".select-dropdown .dropdown dd ul").slideToggle('fast');
-});
+		if(user.length > 2){
 
-$(".select-dropdown .dropdown dd ul li a").on('click', function() {
-  $(".select-dropdown .dropdown dd ul").hide();
-});
+		$('#list_users').show('slow');
+	}else{
 
-function getSelectedValue(id) {
-  return $("#" + id).find("dt a span.value").html();
-}
+		$('#list_users').hide('fast');
+	}
 
-$(document).bind('click', function(e) {
-  var $clicked = $(e.target);
-  if (!$clicked.parents().hasClass("dropdown")) $(".select-dropdown .dropdown dd ul").hide();
-});
-
-$('.mutliSelect input[type="checkbox"]').on('click', function() {
-
-  var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').val(),
-    title = $(this).val() + ",";
-
-  if ($(this).is(':checked')) {
-    var html = '<span title="' + title + '">' + title + '</span>';
-    $('.multiSel').append(html);
-    $(".hida").hide();
-  } else {
-    $('span[title="' + title + '"]').remove();
-    var ret = $(".hida");
-    $('.select-dropdown .dropdown dt a').append(ret);
-
-  }
-});
-
+	});
 </script>

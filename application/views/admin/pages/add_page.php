@@ -3,11 +3,10 @@
 		<div class="panel-heading"><h4>Add new page</h4></div>
 		<div class="panel-body">
 			<div class="form-responsive">
-				<form class="form form-horizontal">
+				<form class="form form-horizontal" id="frmpage">
 					<div class="form-responsive">
 						
 						<div class="form-responsive form-about" >
-              		<form class="form form-horizontal" id="frmpage" name="frmpage" method="post" action="#">
 
               			<div class="form-group">
 
@@ -56,7 +55,7 @@
               					
               					<label>Page title</label>
               				
-              					<input type="text" name="" class="form-control" id="title" name="title" required>
+              					<input type="text" class="form-control" id="title" name="title" required>
 
               				</div>
               				
@@ -76,12 +75,11 @@
               				
               				<div class="col-md-12">
               					
-              				<label></label><button type="button" class="btn btn-success" id="btnpage">Publish</button> <button class="btn btn-warning pull-right hidden">Unpublish</button>
+              				<label></label><button type="submit" class="btn btn-success" id="btnpage">Publish</button> <button class="btn btn-warning pull-right hidden">Unpublish</button>
               					
               				
               				</div>
               			</div>
-              		</form>
               	</div>
 
 					</div>
@@ -169,48 +167,37 @@
 
 
 <script type="text/javascript">
-	$('#btnpage').on('click',function(){
-		var site = $('#opt_site').val();
-		var parent = $('#opt_parent').val();
-		var page_title = $('#title').val();
-		var content = $('#desc').val();
+	
+		$('#frmpage').on('submit',function(){
+			var data = $(this).serialize();
+				//console.log(data);
+				//return false;
+			$.ajax({
 
-		if(parent == 0){
-			alert('Parent is required');
-			return false;
-		}
-
-		if(page_title == ''){
-			alert('Page Title is required');
-			return false;
-		}
-
-
-		var data = 'opt_site='+site+'&opt_parent='+parent+'&title='+page_title+'&desc='+content;
-
-
-		$.ajax({
-		 	  type: 'post',
+		      type: 'post',
 		      url: '<?=site_url('c=pages&f=save_page');?>',
 		      data: data,
 		      dataType:'json',
 		      success: function (resp) {
+		  
+			  			console.clear();
+						console.log(resp);
 
-		      		console.clear();
+						if(resp.stats == true){
 
-					console.log(resp);
-					if(resp.stats == true){
+			            	$('.user-profile').notify('Page added succesfully.', { position:"bottom right", className:"success"
+			            	 }); 
+						}else{
 
-		            	$('.user-profile').notify('Page added succesfully.', { position:"bottom right", className:"success" }); 
-					}else{
-
-		            	$('.user-profile').notify('Page not added!', { position:"bottom right", className:"error" }); 
-					}
+			            	$('.user-profile').notify('Page not added!', { position:"bottom right", className:"error" }); 
+						}	
 		      }
 			});
-		
-		return false;
-	});
+
+
+      		return false;
+		});
+
 </script>
 
 <script type="text/javascript">

@@ -25,55 +25,42 @@ class Post extends CI_Controller {
 	{
 		# code...
 	}
+	public function add_category(){
+		if($this->input->post()){
+			if($id = $this->post_m->add_category(array('cat_name'=>$this->input->post('txtcat')))){
+				echo json_encode(array('stats'=>true,'id'=>$id));
+			}else{
+				echo json_encode(array('stats'=>false));
+			}
+		}
+	}
 	public function create($value='')
 	{	
+		$data['editform'] = true;
 		$sites = '';
-
-		/*if($my_sites = $this->session->userdata['sites']){
-			$my_sites = json_decode($my_sites);
-			$i=0;
-			foreach ($my_sites as $key) {
-				//$sites[] = $key->site_id;
-				$site_name = $this->site_m->getSiteName(false,$key->site_id);
-				//sites[] = $site_name[0]->site_name;
-
-				$site_path = $this->site_m->getSiteName(false,$key->site_id);
-				$sites[] = (object)array('site_id'=>$key->site_id,'site_name'=>$site_name[0]->site_name,'site_path'=>$site_path[0]->site_path);
-
-				$i++;
-			}
-		}*/
-
-		//$this->permission->allow_user($this->uid,3);
 
 		$data['categories'] = $this->post_m->get_categories();
 
-		//if($this->permission->is_admin()){
-
-		//$data['hosted_site'] = $this->admin_m->hosted_sites();
-
-		//}else{
-
 		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
-		//var_dump($data['hosted_site']);
-		//}
-
-
+		
 		$data['site_title'] = 'Create new post';
 		$this->template->load('admin','post/create_p',$data);
 	}
 
 	public function edit($value='')
-	{
+	{		
+		$data['editform'] = true;
 
 		$post_id = $this->input->get('id');
 		if($info = $this->post_m->get_postById($post_id)){
 			$data['p_title'] = $info[0]->post_title;
 			$data['p_slug'] = $info[0]->slug;
 			$data['p_site_path'] = $info[0]->site_path;
+
 			$data['p_content'] = $info[0]->post_content;
 
 			$data['category'] =  $this->post_m->get_categories($post_id);
+			//var_dump($data['category']);exit();
 			$data['site_id'] = $info[0]->site_id;
 			$time = strtotime($info[0]->date_posted);
 			$data['m'] = date('m',$time);
@@ -88,13 +75,23 @@ class Post extends CI_Controller {
 
 			$data['tags'] = is_array($tag) ? implode(',', $tag) : $tag;
 			$img = $this->post_m->get_featuredImg($post_id);
-			//var_dump($img);
 			$data['img_link'] = $img;
 		}
 
+		$galery = false;
+		$u_keys = '';
+		if($gallery = $this->post_m->get_gallImg($post_id)){
+
+			foreach ($gallery as $gal) {
+				$u_keys[] = $gal->u_key;
+			}
+			$u_keys = implode(',', $u_keys);
+		}
+		$data['gallery'] = $gallery;
+
+		$data['u_keys'] = $u_keys;
 
 		$data['categories'] = $this->post_m->get_categories();
-		//$data['hosted_site'] = $this->admin_m->hosted_sites();
 
 		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
 
@@ -137,10 +134,7 @@ class Post extends CI_Controller {
 			}
 
 			$date_posted = $input->years.'-'.$input->months.'-'.$input->days.' '.date('h:m:s');
-
-			//var_dump($date_posted);
-			//exit();
-
+	
 			$info = array(
 				'post_title' => $input->title,
 				'slug'=>$slug,
@@ -164,6 +158,18 @@ class Post extends CI_Controller {
 
 					$save_file = $this->post_m->save_file($post_id,$input->featuredimg_url);
 					}
+
+
+					if(!empty($input->gall_input)){
+
+						$gallery = explode(',', $input->gall_input);
+						foreach ($gallery as $gal) {
+							
+							$save_gall = $this->post_m->save_gall($post_id,$gal);
+						}
+					}
+
+
 					if($save_category = $this->post_m->save_category(array('post_id'=>$post_id,'cat_id'=>$input->category))){
 
 					}
@@ -177,6 +183,17 @@ class Post extends CI_Controller {
 		
 	}
 
+	public function remove_img($value='')
+	{
+		if($this->input->post()){
+			if($this->post_m->remove_gall($this->input->post('u_key'))){
+
+				echo json_encode(array('stats'=>true,'msg'=>'Removed successful'));
+			}else{
+				echo json_encode(array('stats'=>false,'msg'=>'No image remove'));
+			}
+		}
+	}
 
 	public function update_post($value='')
 	{
@@ -219,6 +236,16 @@ class Post extends CI_Controller {
 
 					$update_file = $this->post_m->update_file($input->post_id,$input->featuredimg_url);
 					}
+
+					if(!empty($input->gall_input)){
+
+						$gallery = explode(',', $input->gall_input);
+						foreach ($gallery as $gal) {
+							
+							$save_gall = $this->post_m->save_gall($input->post_id,$gal);
+						}
+					}
+
 
 
 					if($input->old_cat_id != $input->category){
@@ -288,7 +315,6 @@ class Post extends CI_Controller {
 
 			if($upload[$i] = $this->upload('gallery',$file,$i)){
 			    	$j++;
-			//var_dump($upload);
 			    }
 
 			}
@@ -296,15 +322,15 @@ class Post extends CI_Controller {
 			if ($upload) {
 
 				if($uploaded = $this->post_m->save_file_array(array_filter($upload))){
-					//var_dump($upload);
-					$ukey='';
+
+					$link='';
+					$u_key = '';
 					foreach ($upload as $key) {
-						$ukey[]=$key['u_key'];
+						$link[]=array('link'=>$key['link'],'u_key'=>$key['u_key']);
+						///$u_key[]=$key['u_key'];
+
 					}
-					if (is_array($ukey)) {
-						$ukey = implode(',', $ukey);
-					}
-					echo json_encode(array('stats'=>true,'msg'=>$j.' of '.$count.' file uploaded.','u_key'=>$ukey));
+					echo json_encode(array('stats'=>true,'msg'=>$j.' of '.$count.' file uploaded.','link'=>$link));
 					exit();
 				}else{
 					echo json_encode(array('stats'=>false,'msg'=>$uploaded));
@@ -477,7 +503,7 @@ class Post extends CI_Controller {
 
         		if(move_uploaded_file($tmp_file, $newfile)){
 
-                    $data = array('link'=>$newfile,'mtype'=>$mimetype,'newfilename'=>$newfilename,'type'=>$type,'u_key'=>time());
+                    $data = array('link'=>$newfile,'mtype'=>$mimetype,'newfilename'=>$newfilename,'type'=>$type,'u_key'=>"F$i-".time());
                     
                     return $data;
                 }else{

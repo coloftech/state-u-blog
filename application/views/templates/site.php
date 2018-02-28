@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?=$site_title;?></title>
+    <title><?=$site_title;?></title>
 
 
   <meta property="og:url"           content="<?=isset($link) ? $link : site_url();?>" />
   <meta property="og:type"          content="website" />
   <meta property="og:title"         content="<?=isset($meta_title) ? $meta_title : 'Bohol Island State University - Bilar'; ?>" />
   <meta property="og:description"   content="<?=isset($description) ? $description : 'Bohol Island State University - Bilar a  premier Science and Technology University for the formation of World class and virtuous human resource for sustainable development in Bohol and the Country.'; ?>" />
-  <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/post-img.png'); ?>" />
+  <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/4.png'); ?>" />
 
-		<link rel="shortcut icon" href="<?=base_url();?>public/images/fav-bisu.png"/>
+        <link rel="shortcut icon" href="<?=base_url();?>public/images/fav-bisu.png"/>
         <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/bootstrap.min.css">  
-        <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/font-awesome.css">        
-        <link href="<?=base_url('public/assets/css/animate.css');?>" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="<?=base_url();?>public/assets/bootstrap/css/font-awesome.css"> 
 
 
         <?php // add css files
@@ -28,22 +27,34 @@
         <script src="<?=base_url('public/assets/js/notify/dist/notify.js');?>" type="text/javascript"></script>
 </head>
 <body class="site"  data-spy="scroll" data-target=".navbar" data-offset="50">
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=1376312065724577&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <header >
     <div id="top"></div>
-	<div class="header-menu">
-	<?php include 'common/site_menu.php'; ?>
-	</div>
-        <?php $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
+    <div class="header-menu">
+    <?php include 'common/site_menu.php'; ?>
+    </div>
+               <?php 
+        if(!isset($is_index)){
+
+        $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
         if($sitename = $this->site_m->getSiteName($page)){
             echo "<div class='container'><h3>".$sitename[0]->site_name."</h3></div>";
         }else{
             redirect();
         }
 
+        }
          ?>
 </header>
 <div class="site-body" >
-	<?php echo $body; ?>
+    <?php echo $body; ?>
 </div>
 
 <footer>
@@ -77,7 +88,7 @@
     </div>
 </footer>
 <script type="text/javascript">
-	$(document).ready(function(){
+    $(document).ready(function(){
 
 /**
  * This object controls the nav bar. Implement the add and remove
@@ -157,7 +168,7 @@ offSetManager();
 });
 
 /*
-	$('#navbar').on('resize', function () {
+    $('#navbar').on('resize', function () {
     $('.pull-right').toggleClass('pull-left', $(window).width() < 768);
 });
 */

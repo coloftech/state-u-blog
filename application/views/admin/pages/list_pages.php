@@ -18,11 +18,11 @@
 					<?php if (!empty($list_pages)): ?>
 						<?php foreach ($list_pages	as $key): ?>
 							
-					<tr>
+					<tr id="tr-<?=$key->page_id?>">
 						<td><?=$key->page_id?></td>
 						<td><?=$key->page_title?></td>
 						<td><?php echo $this->site_m->getSiteName(false,$key->site_id)[0]->site_name;?></td>
-						<td width="100px"><a href="<?=site_url('c=pages&f=edit_page&id='.$key->page_id)?>" class="btn"><i class="fa fa-edit"></i></a></td>
+						<td width="100px"><a href="<?=site_url('c=pages&f=edit_page&id='.$key->page_id)?>" class="btn"><i class="fa fa-edit"></i></a> <a href="javascript:void(0)" class="btn" onclick="remove_page(<?=$key->page_id?>)"><i class="fa fa-remove"></i></a></td>
 					</tr>
 
 						<?php endforeach ?>
@@ -34,3 +34,34 @@
 </div>
 
 </div>
+
+<script type="text/javascript">
+		function remove_page(page_id){
+
+				$.ajax({
+						type: 'post',
+						url: '<?=site_url("c=pages&f=remove_page");?>',
+						data: 'page_id='+page_id,
+						dataType:'html',
+						success: function(response){
+							console.clear();
+							console.log(response);	
+
+             				//window.location.reload() = true;
+							//if(response.stat == true){
+							$('#tr-'+page_id).remove();
+		             		$('header').notify('Post successfully remove', { position:"bottom right", className:"success" }); 
+
+
+							//}else{
+	
+		             		//$('header').notify('Post is not remove', { position:"bottom right", className:"error" }); 
+
+
+							//}
+
+						}
+					});
+	}
+
+</script>

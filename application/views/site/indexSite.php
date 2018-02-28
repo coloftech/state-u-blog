@@ -2,7 +2,9 @@
 	<br />
 	<div class="container site-container">
 <div class="col-md-9">
-	
+
+ 
+
 <?php 
 
 $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
@@ -12,18 +14,24 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 				<?php foreach ($posts as $key): ?>
 					<div class="post">
 						<div class="col-md-6 post-featured-img">
+
 							<div class="year"><?=$key->post_year;?></div>
 							<div class="month"><?=$key->post_month;?></div>
+
 							<div class="day"><?=$key->post_day;?></div>
+
 							<div class="blured">
 								<a href="<?=site_url("c=site&f=read&p=$key->site_path&i=$key->slug");?>">
 
 									<?php if ($img_link = $this->post_m->get_featuredImg($key->post_id)): ?>
 										
-									<img src="<?=base_url($img_link)?>">
+							<div class="tiles">
+								<div class="tile" data-scale="1.1" data-image="<?=base_url($img_link)?>"></div>
+							</div>
 									<?php else: ?>
-
-									<img src="<?=base_url('public/images/post-img.png')?>">
+							<div class="tiles">
+								<div class="tile" data-scale="1.1" data-image="<?=base_url('public/images/post-img.png')?>"></div>
+							</div>
 									<?php endif ?>
 								</a>
 
@@ -52,7 +60,27 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 					</div>
 				<?php endforeach ?>
 			<?php endif ?>
+
 		<?php endif ?>
+		<?php if (empty($posts)): ?>
+				
+			<?php if (isset($list_pages)): ?>
+			<?php if (is_array($list_pages)): ?>
+				<?php foreach ($list_pages as $key): ?>
+						<?php if(!empty($key->page_content)): ?>
+							<div class="col-md-12" style="margin:0;padding:0;">
+							<div class="panel">
+								<div class="panel-heading"><h4><?=$key->page_title?></h4></div>
+								<div class="panel-body"><?=$this->auto_m->limit_300($key->page_content);?></div>
+							</div>
+							</div>
+
+						<?php endif ?>
+					
+				<?php endforeach ?>
+			<?php endif ?>
+			<?php endif ?>
+		<?php endif  ?>
 
 <div class="col-md-12"><?=isset($pagination) ? $pagination :"";?></div>
 </div>
@@ -61,6 +89,21 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 	<div class="panel-body">
 		<input class="form-control" placeholder="Search" id="search" name="q" /><i class="fa fa-search pul"></i></div>
 	</div>
+
+
+	<div class="panel">
+		<div class="panel-heading"><h4>ABOUT US</h4></div>
+		<div class="panel-body">
+			<ul class="recent-post">
+				<?php if (isset($sidebar_pages)): ?>
+					<?php foreach ($sidebar_pages as $key): ?>
+						<li><a href="<?=site_url('c=site&f=view&p='.$key->site_path.'&i='.$key->page_title);?>"><?=$key->page_title?></a></li>
+					<?php endforeach ?>
+				<?php endif ?>
+			</ul>
+		</div>
+	</div>
+
 	<div class="panel">
 		<div class="panel-heading"><h4>RECENT POST</h4></div>
 		<div class="panel-body">
@@ -71,6 +114,36 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 
 
 	</div>
+
 </div>
 	</div>
 </div>
+
+
+<script type="text/javascript">
+	
+ 	
+  $('.tile')
+    // tile mouse actions
+    .on('mouseover', function(){
+      $(this).children('.photo').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
+    })
+    .on('mouseout', function(){
+      $(this).children('.photo').css({'transform': 'scale(1)'});
+    })
+    /* .on('mousemove', function(e){
+      $(this).children('.photo').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
+   }) */
+    // tiles set up
+    .each(function(){
+      $(this)
+        // add a photo container
+        .append('<div class="photo"></div>')
+        // some text just to show zoom level on current item in this example
+       // .append('<div class="txt"><div class="x">'+ $(this).attr('data-scale') +'x</div>ZOOM ON<br>HOVER</div>')
+        // set up a background image for each tile based on data-image attribute
+        .children('.photo').css({'background-image': 'url('+ $(this).attr('data-image') +')'});
+    })
+	
+
+</script>

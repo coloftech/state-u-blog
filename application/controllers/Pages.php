@@ -34,6 +34,7 @@ class Pages extends CI_Controller {
 
 	public function edit_page($value='')
 	{
+		$data['editform'] = true;
 
 
 		if($this->input->get()){
@@ -61,6 +62,7 @@ class Pages extends CI_Controller {
 
 	public function add_page($value='')
 	{
+		$data['editform'] = true;
 		$data['hosted_site'] = $this->permission->list_user_sites($this->uid);
 
 
@@ -173,6 +175,19 @@ class Pages extends CI_Controller {
 		}
 	}
 
+	public function remove_page()
+	{
+		if($this->input->post()){
+			$input = (object)$this->input->post();
+			if($this->pages_m->remove_page($input->page_id)){
+				echo json_encode(array('stats'=>true));
+				exit();
+			}
+				echo json_encode(array('stats'=>true));
+				exit();
+		}
+
+	}
 
 
 }

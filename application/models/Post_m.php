@@ -134,7 +134,22 @@ class Post_m extends CI_Model
 		}
 	}
 
-	public function recent_post($site_id=false)
+	public function get_gallImg($post_id=0)
+	{
+		if ($post_id > 0) {
+			$this->db->select('link,u_key');
+			$query = $this->db->get_where('post_file',array('gallery_id'=>$post_id));
+			if($result = $query->result()){
+				return $result;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+
+	public function recent_post($site_id=false,$limit=10)
 	{
 		if($site_id){
 			$query = $this->db->select('post.post_title,post.slug,site.site_path')
@@ -142,7 +157,7 @@ class Post_m extends CI_Model
 					->join('site','site.site_id = post.site_id','LEFT')
 					->where('site_id',$site_id)
 					->order_by('post.date_posted desc')
-					->limit(10)
+					->limit($limit)
 					->get();
 			return $query->result();
 		}else{
@@ -151,7 +166,7 @@ class Post_m extends CI_Model
 					->from('post')
 					->join('site','site.site_id = post.site_id','LEFT')
 					->order_by('post.date_posted desc')
-					->limit(10)
+					->limit($limit)
 					->get();
 			return $query->result();
 		}
@@ -176,10 +191,29 @@ class Post_m extends CI_Model
 			$this->db->insert('post_category',$info);
 		}
 	}
+	public function add_category($info=false)
+	{
+		if($info){
+			if($this->db->where($info)->get('category')->result()){
+				return true;
+			}
+			$this->db->insert('category',$info);
+			return $this->db->insert_id();
+		}return false;
+	}
 	public function save_file($post_id=0,$u_key=0)
 	{
 		if($post_id > 0){
 			$this->db->set('post_id',$post_id);
+			$this->db->where('u_key',$u_key);
+			$this->db->update('post_file');
+		}
+	}
+
+	public function save_gall($post_id=0,$u_key='')
+	{
+		if($post_id > 0){
+			$this->db->set('gallery_id',$post_id);
 			$this->db->where('u_key',$u_key);
 			$this->db->update('post_file');
 		}
@@ -274,7 +308,9 @@ class Post_m extends CI_Model
 			foreach ($result as $key) {
 				/* remove not use in post or gallery image */
 				if((int)$key->u_key + 1200 < $time){
-					unlink($key->link);
+					if(!unlink($key->link)){
+
+					}
 					$this->db->where('id',$key->id);	
 					$this->db->delete('post_file');
 
@@ -301,6 +337,28 @@ class Post_m extends CI_Model
 
 
 	}
+	public function remove_gall($u_key=0)
+	{
+		$q = $this->db->get_where('post_file',array('u_key'=>$u_key));
+		if($result = $q->result()){
+
+			foreach ($result as $key) {
+
+					if(unlink($key->link)){
+
+					}
+					$this->db->where('id',$key->id);	
+					$this->db->delete('post_file');
+
+			}
+
+			return true;
+		}
+			return false;
+
+	}
+
+
 
 
 	public function update_post_info($info,$post_id=0)

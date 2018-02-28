@@ -15,7 +15,13 @@ class Summernote extends CI_Controller
 	{
 			if($file = $_FILES){
 
-			//var_dump($file);
+   				if(!$check = getimagesize($_FILES["note_upload"]["tmp_name"])){
+
+
+					echo json_encode(array('stats'=>false,'msg'=>'File is not an image.'));
+					exit();
+  				 }
+    
 				if($upload = $this->upload('Summernote','note_upload')){
 
 					echo json_encode(array('stats'=>true,'link'=>base_url().$upload['link']));

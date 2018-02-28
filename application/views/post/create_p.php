@@ -1,5 +1,26 @@
 <style type="text/css">
+.fa-remove.hover{
+	color: red;
+}
+.preview-gal{
+	padding: 2px;
+	margin: 0;
+	margin-top: 30px;
+	width: 100%;
+	height: 100%;
+	width: 200px !important;
+	height: 180px !important;
+}
+.preview-gal img{
 
+	width: 100%;
+	height: 100%;
+}
+.preview-gal:hover{
+	background: rgba(255, 204, 204,0.5);
+	padding: 2px;
+
+}
 </style>
 
 <div class="wrapper admin-wrapper create">
@@ -25,6 +46,15 @@
         <div id="listoftags" class="listoftags"></div>
       </div>
 
+      <div class="form-group gallery-input">
+      	<input type="hidden" name="gall_input" id="gall_input" value="" class="form-control ">
+      	<br />
+      </div>
+
+      <div class="form-group gallery-preview">
+      	
+      </div>
+
 			<div class="hidden">
 				
 			<input type="hidden" id="featuredImg" name="featuredImg" />
@@ -37,7 +67,7 @@
 
 	<div class="col-md-4">
 	<div class="row">
-		<div class="panel">
+		<div class="panel panel-info ">
 			<div class="panel-heading"><h5><b>Publish</b> <span class="pull-right clickable" style="cursor: pointer;"><i class="glyphicon glyphicon-chevron-up"></i></span></h5></div>
 			<div class="panel-body">
 				
@@ -124,7 +154,7 @@
 			</div>
 		</div>
 
-		<div class="panel">
+		<div class="panel panel-info">
 			<div class="panel-heading"><h5><b>Categories</b><a class="btn btn" title="Add category"  data-toggle="modal"  data-target="#catModal"><i class="fa fa-plus-circle"></i></a> <span class="pull-right clickable" style="cursor: pointer;"><i class="glyphicon glyphicon-chevron-up"></i></span></h5></div>
 			<div class="panel-body">
 					<div class="category">
@@ -146,7 +176,7 @@
 			</div>
 		</div>
 
-		<div class="panel">
+		<div class="panel panel-info">
 			<div class="panel-heading"><h5><b>Site</b> <span class="pull-right clickable" style="cursor: pointer;"><i class="glyphicon glyphicon-chevron-up"></i></span></h5></div>
 			<div class="panel-body">
 				
@@ -164,7 +194,7 @@
 			</div>
 		</div>
 
-		<div class="panel">
+		<div class="panel panel-info">
 			<div class="panel-heading"><h5><b>Featured Image</b> <span class="pull-right clickable" style="cursor: pointer;"><i class="glyphicon glyphicon-chevron-up"></i></span></h5></div>
 			<div class="panel-body">
 				<i style="font-size:10px;">Note: A featured image will display at the top of the post.</i>
@@ -181,13 +211,13 @@
 		</div>
 
 
-		<div class="panel">
+		<div class="panel panel-info">
 			<div class="panel-heading"><h5><b>Photo gallery</b> <span class="pull-right clickable" style="cursor: pointer;"><i class="glyphicon glyphicon-chevron-up"></i></span></h5></div>
 			<div class="panel-body">
 				<i style="font-size:10px;">Note: A photo gallery is a group of images that will display at the bottom of the post.</i>
 			<input type="hidden" name="txtgallery" id="txtgallery" value="">
 			<div class="featured">
-			<button class="btn btn-default" data-toggle="modal"  data-target="#galleryModal"type="button" ><i class="fa fa-image "></i></button>
+			<button class="btn btn-warning" data-toggle="modal"  data-target="#galleryModal"type="button" ><i class="fa fa-image "></i></button>
 			</div>
 		</div>
 		</div>
@@ -392,6 +422,36 @@
 })
 
 
+$('#frmcat').on('submit', function(){
+
+	var data = $(this).serialize();
+	var cat = $('#txtcat').val();
+				$.ajax({
+
+		      type: 'post',
+		      url: '<?=site_url('c=post&f=add_category');?>',
+		      data: data,
+		      dataType:'json',
+		      success: function (resp) {
+		      		
+		      		if(resp.stats == true){
+
+							$('#catModal').modal('hide');
+							$('#category').append('<option value="'+resp.id+'" selected>'+cat+'</option>')
+		      	//console.log(resp);
+		             $('user-profile').notify("Category added successfully", { position:"bottom right", className:"success" }); 
+			             
+
+		         	}else{
+
+		            	$('user-profile').notify('No category added', { position:"bottom right", className:"error" }); 
+		         	}
+							
+		      }
+			});
+
+				return false;
+	});
 </script>
 
 <script type="text/javascript">
@@ -468,37 +528,26 @@
 		                    $('.upload_img').html('Upload on progress with '+percentComplete+' % to complete.');
 		                    //console.log(percentComplete);
 		                   
-		                    $(".progress").show('fast');
-		                    $(".progress").width('100%');
-		                    $(".progress-bar").width(percentComplete +'%')
 		                    
 		                    if (percentComplete < 10) {
 		                      $('.upload_img').addClass('alert-danger');
-		                    $(".bar").addClass('color-10');
 		                    }
 		                    if (percentComplete >=10 && percentComplete < 25) {
 		                      $('.upload_img').removeClass('alert-danger');
-		                    $(".bar").removeClass('color-10');
-		                    $(".bar").addClass('color-25');
 		                    }
 		                    if (percentComplete >= 25 && percentComplete < 50) {
 		                      $('.upload_img').removeClass('alert-danger');
 		                      $('.upload_img').addClass('alert-warning');
-		                    $(".bar").removeClass('color-25');
-		                    $(".bar").addClass('color-50');
+
 		                    }
 		                    if (percentComplete >= 50 && percentComplete < 75) {
 		                      $('.upload_img').removeClass('alert-warning');
 		                      $('.upload_img').addClass('alert-info');
-		                    $(".bar").removeClass('color-50');
-		                    $(".bar").addClass('color-75');
 		                    }
 		                    if (percentComplete === 100) {
 		                      $('.upload_img').removeClass('alert-info');
 		                      $('.upload_img').addClass('alert-success');
 		                      $('.upload_img').html('proccessing...');
-		                    $(".bar").removeClass('color-75');
-		                    $(".bar").addClass('color-100');
 
 		                    }
 
@@ -534,7 +583,6 @@
 		                      $('.upload_img').removeClass('btn');
 		                  		$('.upload_img').html('');
 		                  
-		                  		$('.progress').hide('fast');
 
 		              }
 		          }
@@ -572,6 +620,7 @@
     		var i = 0;
     		var percentComplete;
     		var xhr;
+    		var	gall_input = [];
 		function uploadImageGal(data) {
 
 		     console.clear();
@@ -590,37 +639,25 @@
 		                    $('.upload_img').html('Upload on progress with '+percentComplete+' % to complete.');
 		                    //console.log(percentComplete);
 		                   
-		                    $(".progress").show('fast');
-		                    $(".progress").width('100%');
-		                    $(".progress-bar").width(percentComplete +'%')
 		                    
 		                    if (percentComplete < 10) {
 		                      $('.upload_img').addClass('alert-danger');
-		                    $(".bar").addClass('color-10');
 		                    }
 		                    if (percentComplete >=10 && percentComplete < 25) {
 		                      $('.upload_img').removeClass('alert-danger');
-		                    $(".bar").removeClass('color-10');
-		                    $(".bar").addClass('color-25');
 		                    }
 		                    if (percentComplete >= 25 && percentComplete < 50) {
 		                      $('.upload_img').removeClass('alert-danger');
 		                      $('.upload_img').addClass('alert-warning');
-		                    $(".bar").removeClass('color-25');
-		                    $(".bar").addClass('color-50');
 		                    }
 		                    if (percentComplete >= 50 && percentComplete < 75) {
 		                      $('.upload_img').removeClass('alert-warning');
 		                      $('.upload_img').addClass('alert-info');
-		                    $(".bar").removeClass('color-50');
-		                    $(".bar").addClass('color-75');
 		                    }
 		                    if (percentComplete === 100) {
 		                      $('.upload_img').removeClass('alert-info');
 		                      $('.upload_img').addClass('alert-success');
 		                      $('.upload_img').html('proccessing...');
-		                    $(".bar").removeClass('color-75');
-		                    $(".bar").addClass('color-100');
 
 		                    }
 
@@ -640,8 +677,18 @@
 		      		console.clear();
 					console.log(resp);
 					if(resp.stats == true){
-						$('#txtgallery').val(resp.u_key);
-					}
+						//$('#txtgallery').val(resp.u_key);
+							$.each(resp.link, function(i, item) {
+							    console.log(item.link);
+
+							    $('.gallery-preview').append('<div class="col-md-4 preview-gal" id="'+item.u_key+'" ><i class="fa fa-remove btn pull-right" onclick="remove_gal(\''+item.u_key+'\')"></i><img src="<?=base_url();?>'+item.link+'" alt="Preview '+i+'" style="width:100%;" /></div>');
+
+							    gall_input.push(item.u_key);
+
+							});
+							console.log(gall_input.join());
+							$('#gall_input').val(gall_input.join())
+						}
 		      },
 		         complete: function() {
 		          // setting a timeouti--;
@@ -650,7 +697,6 @@
 		                      $('.upload_img').removeClass('btn');
 		                  		$('.upload_img').html('');
 		                  
-		                  		$('.progress').hide('fast');
 
 		              }
 		          }
@@ -675,12 +721,66 @@
 			}
 			return false;
 		}
+
+
+		function remove_gal(id) {
+			$('#'+id).remove();
+			refresh_gall(id);
+
+			var data = 'u_key='+id;
+			$.ajax({
+
+		      type: 'post',
+		      url: '<?=site_url('c=post&f=remove_img');?>',
+		      data: data,
+		      dataType:'json',
+		      success: function (resp) {
+		      	console.log(resp);
+		      		
+		      		if(resp.stats == true){
+
+		             $('user-profile').notify(resp.msg, { position:"bottom right", className:"success" }); 
+			             
+
+		         	}else{
+
+		            	$('user-profile').notify(resp.msg, { position:"bottom right", className:"error" }); 
+		         	}
+							
+		      }
+			});
+
+		}
+
+
+
+		function refresh_gall(id){
+
+			var	newarray = [];
+			var array = $('#gall_input').val().split(",");
+			$.each(array,function(i){
+			   //alert(array[i]);
+			   if(array[i] != id){
+			   newarray.push(array[i]);
+			   }
+			});
+			if(newarray.length > 0){
+
+			$('#gall_input').val(newarray.join());
+			}else{
+
+			$('#gall_input').val('');
+			}
+			gall_input = newarray;
+		}
 </script>
 
 <script type="text/javascript">
 	
 		$('#frmcreate').on('submit',function(){
 			var data = $(this).serialize();
+			//console.log(data);
+			//return false;
 			var site = $('#group').val();
 			if(site == ''){
 				console.log('empty');
@@ -688,7 +788,6 @@
 				return false;
 			}
 		     console.clear();
-			 //console.log(data);
 
 			$.ajax({
 

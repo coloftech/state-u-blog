@@ -29,6 +29,16 @@ h1,h2,h3,h4,h5,h6{
 
     margin-top: -50px;
 }
+.create .modal .note-form-label,
+.create .modal .note-form-control{
+   width: 95%;
+   margin-left: 10px;
+
+}
+.create .modal #note-upload{cursor: pointer;}
+.create .note-group-select-from-files {
+  display: none;
+}
 .create{
     margin-top: 120px;
     padding: 5px;
@@ -38,10 +48,6 @@ h1,h2,h3,h4,h5,h6{
 }
 .create textarea:focus{
     background-color: #f9fac8;
-}
-.create .form-control:focus{
-    background-color: #f9fac8;
-
 }
 
 .create .featured .featuredImg{
@@ -59,7 +65,10 @@ h1,h2,h3,h4,h5,h6{
     display: block;
     margin-top: 3px;
 }
-  
+       form   .thumb{
+          margin: 10px 5px 0 0;
+          width: 100px;
+      }
 ul.ul-on-input{
           text-decoration: none;
           list-style: none;

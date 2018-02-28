@@ -12,9 +12,27 @@ class Pages_m extends CI_Model
 
 	}
 
-	public function list_pages($value='')
+	public function list_pages($site_id=false,$limit=false)
 	{
-		return $this->db->get('pages')->result();
+		if($site_id){
+		$this->db->select('pages.*,site.site_path')
+			->from('pages')
+			->join('site','site.site_id = pages.site_id','left');
+		$this->db->where(array('pages.site_id'=>$site_id,'pages.page_content <>'=>''));
+			if($limit){
+
+			$this->db->limit($limit);
+			}
+
+		return $this->db->get()->result();
+
+		}
+
+
+		$this->db->select('pages.*, site.site_name')
+			->from('pages')
+			->join('site','site.site_id = pages.site_id','left');
+		return $this->db->get()->result();
 	}
 
 	public function getParentPages($parent_id=0,$site_id = 0)
@@ -82,6 +100,14 @@ class Pages_m extends CI_Model
 
 
 
+	public function remove_page($page_id=0)
+	{
+		
+		$this->db->where('page_id',$page_id);
+		return $this->db->delete('pages');
+
+
+	}
 
 
 

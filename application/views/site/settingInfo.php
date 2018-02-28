@@ -2,7 +2,7 @@
 	<div class="container site-container">
 		<h4><?php echo $this->input->get('i') ? $this->input->get('i') : ''; ?></h4>
 
-		<div class="col-md-8">
+		<div class="col-md-8 page-content">
 			<?=isset($about) ? $about : ''; ?>
 
 		</div>
